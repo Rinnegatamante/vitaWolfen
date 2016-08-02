@@ -218,7 +218,8 @@ void CloseWrite(FILE* fp)
 
 int WriteSeek(FILE* fp, int offset, int whence)
 {
-	return fseek(fp, offset, whence);
+	fseek(fp, offset, whence);
+	return ftell(fp);
 }
 
 int WritePos(FILE* fp)
@@ -269,7 +270,8 @@ void CloseRead(FILE* fp)
 
 int ReadSeek(FILE* fp, int offset, int whence)
 {
-	return fseek(fp, offset, whence);
+	fseek(fp, offset, whence);
+	return ftell(fp);
 }
 
 int ReadLength(FILE* fp)
