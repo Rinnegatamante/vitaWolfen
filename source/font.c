@@ -59,9 +59,9 @@ void font_draw_stringf(int x, int y, unsigned int color, const char *s, ...)
 }
 
 // printf replacement, only for debug purposes
-int y_printf = 0;
+//int y_printf = 0;
 void gpu_printf (const char *format, ...){
-	__gnuc_va_list arg;
+	/*__gnuc_va_list arg;
 	int done;
 
 	va_start (arg, format);
@@ -76,7 +76,7 @@ void gpu_printf (const char *format, ...){
 		vita2d_swap_buffers();
 		sceDisplayWaitVblankStart();
 	}
-	sceKernelDelayThread(500000);
+	//sceKernelDelayThread(500000);
 	y_printf += 20;
 	if (y_printf > 520){
 		y_printf = 0;
@@ -87,5 +87,5 @@ void gpu_printf (const char *format, ...){
 			vita2d_swap_buffers();
 			sceDisplayWaitVblankStart();
 		}
-	}
+	}*/
 }

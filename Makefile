@@ -1,5 +1,6 @@
 TARGET		:= vitaWolfen
-TITLE		:= WOLF000001
+TITLE		:= WOLF00001
+WMODE		:= 0
 
 LIBS = -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
@@ -42,7 +43,7 @@ OBJS     := $(addsuffix .o,$(BINFILES)) $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CXX      = $(PREFIX)-g++
-CFLAGS  = -Wl,-q -O3 -DSKIPFADE -DHAVE_FFBLK -DDOSISM
+CFLAGS  = -Wl,-q -O3 -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE)
 CXXFLAGS  = $(CFLAGS) -fno-exceptions
 ASFLAGS = $(CFLAGS)
 
@@ -52,7 +53,7 @@ $(TARGET).vpk: $(TARGET).velf
 	vita-make-fself $< .\release\eboot.bin
 	vita-mksfoex -s TITLE_ID=$(TITLE) "$(TARGET)" param.sfo
 	cp -f param.sfo ./release/sce_sys/param.sfo
-	
+	cp -f ./assets/startup_$(WMODE).png ./release/sce_sys/livearea/contents/startup.png
 	#------------ Comment this if you don't have 7zip ------------------
 	7z a -tzip ./$(TARGET).vpk -r .\release\sce_sys\* .\release\eboot.bin 
 	#-------------------------------------------------------------------
