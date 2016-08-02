@@ -15,6 +15,7 @@ SceUInt16 d_8to16table[256];
 int vwidth = 960;
 int vheight = 544;
 int vstride = 960;
+int camera_x, move_x, move_y;
 char path[256];
 vita2d_texture* tex_buffer;
 
@@ -144,9 +145,9 @@ void VL_SetPalette(const byte *palette)
 	unsigned r, g, b;
 	
 	for(i=0; i<256; i++){
-		r = pal[0];
-		g = pal[1];
-		b = pal[2];
+		r = pal[0] << 2;
+		g = pal[1] << 2;
+		b = pal[2] << 2;
 		palette_tbl[i] = r | (g << 8) | (b << 16) | (0xFF << 24);
 		pal += 3;
 	}
@@ -210,7 +211,7 @@ void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 		}
 		keyboard_handler(sc_Enter, state);
 	}
-	if( keys & SCE_CTRL_CIRCLE){ // Yes button/Fire
+	if( keys & SCE_CTRL_CROSS){ // Yes button/Fire
 		keyboard_handler(sc_Y, state); 
 		keyboard_handler(sc_Control, state);
 	}
@@ -220,7 +221,7 @@ void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 	if( keys & SCE_CTRL_SQUARE){ // Open/Operate
 		keyboard_handler(sc_Space, state);
 	}
-	if( keys & SCE_CTRL_CROSS){ // Back
+	if( keys & SCE_CTRL_CIRCLE){ // Back
 		keyboard_handler(sc_BackSpace, state);
 		keyboard_handler(sc_N, state);
 	}
@@ -239,13 +240,42 @@ void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 	if( keys & SCE_CTRL_RIGHT){
 		keyboard_handler(sc_RightArrow, state);
 	}
-	if( keys & SCE_CTRL_LTRIGGER){ // Move left
-		keyboard_handler(sc_Alt, state);
-		keyboard_handler(sc_LeftArrow, state);
+	if( keys & SCE_CTRL_LTRIGGER){ // Change weapon
+		if (state == 1){
+			weapon = gamestate.weapon;
+			if (gamestate.weapon == 0){
+				keyboard_handler(sc_1, 0);
+				keyboard_handler(sc_2, 1);
+				keyboard_handler(sc_3, 0); 
+				keyboard_handler(sc_4, 0);
+			}else if (gamestate.weapon == 1){
+				keyboard_handler(sc_1, 0);
+				keyboard_handler(sc_2, 0);
+				keyboard_handler(sc_3, 1); 
+				keyboard_handler(sc_4, 0);
+			}else if (gamestate.weapon == 2){
+				keyboard_handler(sc_1, 0);
+				keyboard_handler(sc_2, 0);
+				keyboard_handler(sc_3, 0); 
+				keyboard_handler(sc_4, 1);
+			}else{
+				keyboard_handler(sc_1, 1);
+				keyboard_handler(sc_2, 0);
+				keyboard_handler(sc_3, 0); 
+				keyboard_handler(sc_4, 0);
+			}
+		}else{
+			if (gamestate.weapon == weapon) keyboard_handler(sc_1, 1); 
+			else keyboard_handler(sc_1, 0); 
+			keyboard_handler(sc_2, 0);
+			keyboard_handler(sc_3, 0); 
+			keyboard_handler(sc_4, 0);
+		}
+		keyboard_handler(sc_Enter, state);
 	}
-	if( keys & SCE_CTRL_RTRIGGER){ // Move right
-		keyboard_handler(sc_Alt, state);
-		keyboard_handler(sc_RightArrow, state);
+	if( keys & SCE_CTRL_RTRIGGER){ // Yes button/Fire
+		keyboard_handler(sc_Y, state); 
+		keyboard_handler(sc_Control, state);
 	}
 	/*if (keys & KEY_TOUCH){ // Touchscreen support
 		if (state == 1) INL_ReadTouch();
@@ -283,13 +313,13 @@ void INL_Update()
 	if(kDown.buttons)
 		INL_SetKeys(kDown.buttons, 1);
 	
-	// Circle Stick Support
-	/*circlePosition cpos;
-	hidCircleRead(&cpos);
-	if (abs(cpos.dx) > 32) mx = (cpos.dx) >> 1;
-	else mx = 0;
-	if (abs(cpos.dy) > 32) my = (0-(cpos.dy)) >> 2;
-	else my = 0;*/
+	// Analogs Support
+	int left_x = kDown.lx - 127;
+	int left_y = kDown.ly - 127;
+	int right_x = kDown.rx - 127;
+	camera_x = (abs(right_x) < 10 ? 0 : right_x) * 10 /(13-mouseadjustment);
+	move_x = (abs(left_x) < 10 ? 0 : left_x >> 1) * 10 /(13-mouseadjustment);
+	move_y = (abs(left_y) < 15 ? 0 : left_y >> 1) * 10 /(13-mouseadjustment);
 	
 }
 

@@ -106,40 +106,32 @@ void CheckWeaponChange()
 =======================
 */
 
+extern int move_x, move_y, camera_x;
+
 void ControlMovement(objtype *ob)
 {
 	int		angle;
 	int		angleunits;
 
 	thrustspeed = 0;
-//
-// side to side move
-//
-	if (buttonstate[bt_strafe])
-	{
+
 	//
-	// strafing
-	//
-	//
-		if (controlx > 0)
+		if (move_x > 0)
 		{
 			angle = ob->angle - ANGLES/4;
 			if (angle < 0)
 				angle += ANGLES;
-			Thrust (angle,controlx*MOVESCALE);	// move to left
+			Thrust (angle,move_x*MOVESCALE);	// move to left
 		}
-		else if (controlx < 0)
+		else if (move_x < 0)
 		{
 			angle = ob->angle + ANGLES/4;
 			if (angle >= ANGLES)
 				angle -= ANGLES;
-			Thrust (angle,-controlx*MOVESCALE);	// move to right
+			Thrust (angle,-move_x*MOVESCALE);	// move to right
 		}
-	} else {
-	//
-	// not strafing
-	//
-		anglefrac += controlx;
+	
+		anglefrac += camera_x;
 		angleunits = anglefrac/ANGLESCALE;
 		anglefrac -= angleunits*ANGLESCALE;
 		ob->angle -= angleunits;
@@ -149,21 +141,20 @@ void ControlMovement(objtype *ob)
 		if (ob->angle < 0)
 			ob->angle += ANGLES;
 
-	}
 
 //
 // forward/backwards move
 //
-	if (controly < 0)
+	if (move_y < 0)
 	{
-		Thrust (ob->angle,-controly*MOVESCALE);	// move forwards
+		Thrust (ob->angle,-move_y*MOVESCALE);	// move forwards
 	}
-	else if (controly > 0)
+	else if (move_y > 0)
 	{
 		angle = ob->angle + ANGLES/2;
 		if (angle >= ANGLES)
 			angle -= ANGLES;
-		Thrust (angle,controly*BACKMOVESCALE);		// move backwards
+		Thrust (angle,move_y*BACKMOVESCALE);		// move backwards
 	}
 
 	if (gamestate.victoryflag)		// watching the BJ actor
