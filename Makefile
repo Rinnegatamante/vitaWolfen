@@ -1,6 +1,6 @@
 TARGET		:= vitaWolfen
-TITLE		:= WOLF00001
 WMODE		:= 0
+TITLE		:= WOLF0000$(WMODE)
 
 LIBS = -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
