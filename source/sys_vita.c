@@ -71,10 +71,11 @@ void Quit(signed char *error)
 		//DisplayTextSplash(screen);
 	}
 	
-	/*if (error && *error) {
-		printf("Fatal Error: %s\nPress A to exit\n\n", error);
-		do{hidScanInput();}while(!(hidKeysDown() & KEY_A));				
- 	}*/
+	if (error && *error) {
+		printf("Fatal Error: %s\nPress X to exit.", error);
+		SceCtrlData pad;
+		do{ sceCtrlPeekBufferPositive(0, &pad, 1); }while(!(pad.buttons & SCE_CTRL_CROSS));				
+ 	}
 	
 	exitGame();
 }

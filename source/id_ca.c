@@ -37,9 +37,9 @@ static long *audiostarts; /* array of offsets in audiot */
 
 static huffnode grhuffman[256];
 
-static int grhandle = -1;	/* handle to VGAGRAPH */
-static int maphandle = -1;	/* handle to GAMEMAPS */
-static int audiohandle = -1;	/* handle to AUDIOT */
+static FILE* grhandle = NULL;	/* handle to VGAGRAPH */
+static FILE* maphandle = NULL;	/* handle to GAMEMAPS */
+static FILE* audiohandle = NULL;	/* handle to AUDIOT */
 
 /*
 =============================================================================
@@ -72,11 +72,11 @@ static void CA_CannotOpen(signed char *string)
 boolean CA_WriteFile(signed char *filename, void *ptr, long length)
 {
 	ssize_t l;
-	int handle;
+	FILE* handle;
 
 	handle = OpenWrite(filename);
 
-	if (handle == -1)
+	if (handle == NULL)
 		return false;
 
 	l = WriteBytes(handle, (byte *)ptr, length);
@@ -108,11 +108,11 @@ boolean CA_WriteFile(signed char *filename, void *ptr, long length)
 
 boolean CA_LoadFile(signed char *filename, memptr *ptr)
 {
-	int handle;
+	FILE* handle;
 	ssize_t l;
 	long size;
 
-	if ((handle = OpenRead(filename)) == -1)
+	if ((handle = OpenRead(filename)) == NULL)
 		return false;
 
 	size = ReadLength(handle);
@@ -304,7 +304,7 @@ void CA_RLEWexpand(word *source, word *dest, long length, word rlewtag)
 static void CAL_SetupGrFile()
 {
 	signed char fname[13];
-	int handle;
+	FILE* handle;
 	byte *grtemp;
 	int i;
 
@@ -314,7 +314,7 @@ static void CAL_SetupGrFile()
 	
 	printf("Opening %s", fname);
 	handle = OpenRead(fname);
-	if (handle == -1)
+	if (handle == NULL)
 		CA_CannotOpen(fname);
 	
 	printf("Reading", fname);
@@ -335,7 +335,7 @@ static void CAL_SetupGrFile()
 	
 	printf("Opening %s", fname);
 	handle = OpenRead(fname);
-	if (handle == -1)
+	if (handle == NULL)
 		CA_CannotOpen(fname);
 	
 	printf("Reading");
@@ -355,7 +355,7 @@ static void CAL_SetupGrFile()
 
 	printf("Opening %s", fname);
 	grhandle = OpenRead(fname);
-	if (grhandle == -1)
+	if (grhandle == NULL)
 		CA_CannotOpen(fname);
 
 /* load the pic headers into pictable */
@@ -384,7 +384,7 @@ static void CAL_SetupGrFile()
 static void CAL_SetupMapFile()
 {
 	int i;
-	int handle;
+	FILE* handle;
 	long pos;
 	signed char fname[13];
 
@@ -393,7 +393,7 @@ static void CAL_SetupMapFile()
 	
 	printf("Opening %s",fname);
 	handle = OpenRead(fname);
-	if (handle == -1)
+	if (handle == NULL)
 		CA_CannotOpen(fname);
 	
 	printf("Reading file");
@@ -405,7 +405,7 @@ static void CAL_SetupMapFile()
 	
 	printf("Opening %s",fname);
 	maphandle = OpenRead(fname);
-	if (maphandle == -1)
+	if (maphandle == NULL)
 		CA_CannotOpen(fname);
 
 /* load all map header */
@@ -458,7 +458,7 @@ static void CAL_SetupMapFile()
 
 static void CAL_SetupAudioFile()
 {
-	int handle;
+	FILE* handle;
 	long length;
 	signed char fname[13];
 	int i;
@@ -468,7 +468,7 @@ static void CAL_SetupAudioFile()
 
 	printf("Opening %s", fname);
 	handle = OpenRead(fname);
-	if (handle == -1)
+	if (handle == NULL)
 		CA_CannotOpen(fname);
 
 	printf("Checking length");
@@ -490,7 +490,7 @@ static void CAL_SetupAudioFile()
 
 	printf("Opening %s", fname);
 	audiohandle = OpenRead(fname);
-	if (audiohandle == -1)
+	if (audiohandle == NULL)
 		CA_CannotOpen(fname);
 }
 
@@ -651,7 +651,7 @@ void CA_CacheGrChunk(int chunk)
 	long pos, compressed;
 	byte *source;
 
-	if (grhandle == -1)
+	if (grhandle == NULL)
 		return;
 
 	if (grsegs[chunk]) {
@@ -777,7 +777,7 @@ void MM_SortMem()
 
 static boolean PMStarted;
 
-static int PageFile = -1;
+static FILE* PageFile = NULL;
 int ChunksInFile, PMSpriteStart, PMSoundStart;
 
 PageListStruct *PMPages;
@@ -805,9 +805,9 @@ static void PML_OpenPageFile()
 
 	printf("Opening page file %s...",fname);
 	PageFile = OpenRead(fname);
-	if (PageFile == -1)
+	if (PageFile == NULL)
 		Quit("PML_OpenPageFile: Unable to open page file");
-	printf("Done!\n",fname);
+	printf("Done!\n");
 	
 	/* Read in header variables */
 	ChunksInFile = ReadInt16(PageFile);
@@ -839,7 +839,7 @@ static void PML_OpenPageFile()
 
 static void PML_ClosePageFile()
 {
-	if (PageFile != -1)
+	if (PageFile != NULL)
 		CloseRead(PageFile);
 
 	if (PMPages) {

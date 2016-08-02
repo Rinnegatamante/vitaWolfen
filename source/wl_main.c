@@ -110,7 +110,7 @@ static void DiskFlopAnim(int x, int y)
 	which ^= 1;
 }
 
-static int32_t CalcFileChecksum(int fd, int len)
+static int32_t CalcFileChecksum(FILE* fd, int len)
 {
 	int32_t cs;
 	int i;
@@ -129,12 +129,12 @@ static int32_t CalcFileChecksum(int fd, int len)
 int WriteConfig()
 {
 	int i;
-	int fd;
+	FILE* fd;
 	int32_t cs;
 
 	fd = OpenWrite(configname);
 
-	if (fd != -1) {
+	if (fd != NULL) {
 		WriteBytes(fd, (byte *)GAMEHDR, 8);	/* WOLF3D, 0, 0 */
 		WriteBytes(fd, (byte *)CFGTYPE, 4);	/* CFG, 0 */
 	/**/	WriteInt32(fd, 0xFFFFFFFF);		/* Version (integer) */
@@ -191,7 +191,8 @@ static void SetDefaults()
 
 int ReadConfig()
 {
-	int fd, configokay;
+	FILE* fd;
+	int configokay;
 	signed char buf[8];
 	int32_t version, v;
 	int i;
@@ -200,7 +201,7 @@ int ReadConfig()
 
 	fd = OpenRead(configname);
 
-	if (fd != -1) {
+	if (fd != NULL) {
 		SetDefaults();
 
 		ReadBytes(fd, (byte *)buf, 8);
@@ -286,7 +287,7 @@ int ReadConfig()
 
 configend:
 
-	if (fd != -1)
+	if (fd != NULL)
 		CloseRead(fd);
 
 	if (!configokay) {
@@ -323,14 +324,14 @@ long DoChecksum(byte *source, int size, long checksum)
 
 int SaveTheGame(signed char *fn, signed char *tag, int x, int y)
 {
-	int fd;
+	FILE* fd;
 	int i;
 	objtype *ob, nullobj;
 	long checksum;
 
 	fd = OpenWrite(fn);
 
-	if (fd == -1) {
+	if (fd == NULL) {
 		Message(STR_NOSPACE1"\n"
 			STR_NOSPACE2);
 
@@ -449,11 +450,11 @@ int SaveTheGame(signed char *fn, signed char *tag, int x, int y)
 int ReadSaveTag(signed char *fn, signed char *tag)
 {
 	signed char buf[8];
-	int fd;
+	FILE* fd;
 	int32_t v;
 
 	fd = OpenRead(fn);
-	if (fd == -1)
+	if (fd == NULL)
 		goto rstfail;
 
 	ReadBytes(fd, (byte *)buf, 8);
@@ -480,7 +481,7 @@ int ReadSaveTag(signed char *fn, signed char *tag)
 	return 0;
 
 rstfail:
-	if (fd != -1)
+	if (fd == NULL)
 		CloseRead(fd);
 
 	return -1;
@@ -492,13 +493,13 @@ rstfail:
 
 int LoadTheGame(signed char *fn, int x, int y)
 {
-	int fd;
+	FILE* fd;
 	int i;
 	long checksum, oldchecksum;
 	objtype nullobj;
 
 	fd = OpenRead(fn);
-	if (fd == -1)
+	if (fd == NULL)
 		goto openfail;
 
 	ReadSeek(fd, 64, SEEK_SET);

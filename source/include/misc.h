@@ -10,7 +10,7 @@ void SavePCXRGBToFile(unsigned char *buf, int width, int height, signed char *na
 void set_TimeCount(unsigned long t);
 unsigned long get_TimeCount();
 
-long filelength(int handle);
+long filelength(FILE* handle);
 
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
@@ -23,28 +23,28 @@ char *ultoa(unsigned long value, char *string, int radix);
 uint16_t SwapInt16L(uint16_t i);
 uint32_t SwapInt32L(uint32_t i);
 
-extern int OpenWrite(signed char *fn);
-extern int OpenWriteAppend(signed char *fn);
-extern void CloseWrite(int fp);
+extern FILE* OpenWrite(signed char *fn);
+extern FILE* OpenWriteAppend(signed char *fn);
+extern void CloseWrite(FILE* fp);
 
-extern int WriteSeek(int fp, int offset, int whence);
-extern int WritePos(int fp);
+extern int WriteSeek(FILE* fp, int offset, int whence);
+extern int WritePos(FILE* fp);
 
-extern int WriteInt8(int fp, int8_t d);
-extern int WriteInt16(int fp, int16_t d);
-extern int WriteInt32(int fp, int32_t d);
-extern int WriteBytes(int fp, byte *d, int len);
+extern int WriteInt8(FILE* fp, int8_t d);
+extern int WriteInt16(FILE* fp, int16_t d);
+extern int WriteInt32(FILE* fp, int32_t d);
+extern int WriteBytes(FILE* fp, byte *d, int len);
 
-extern int OpenRead(signed char *fn);
-extern void CloseRead(int fp);
+extern FILE* OpenRead(signed char *fn);
+extern void CloseRead(FILE* fp);
 
-extern int ReadSeek(int fp, int offset, int whence);
-extern int ReadLength(int fp);
+extern int ReadSeek(FILE* fp, int offset, int whence);
+extern int ReadLength(FILE* fp);
 
-extern int8_t ReadInt8(int fp);
-extern int16_t ReadInt16(int fp);
-extern int32_t ReadInt32(int fp);
-extern int ReadBytes(int fp, byte *d, int len);
+extern int8_t ReadInt8(FILE* fp);
+extern int16_t ReadInt16(FILE* fp);
+extern int32_t ReadInt32(FILE* fp);
+extern int ReadBytes(FILE* fp, byte *d, int len);
 
 
 static __inline__ uint16_t SwapInt16(uint16_t i)

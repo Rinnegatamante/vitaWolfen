@@ -1,29 +1,7 @@
 #include <sys/time.h>
-#include <fcntl.h>
-#include <psp2/io/fcntl.h>
-#include <psp2/io/stat.h>
-#include <psp2/io/dirent.h>          
+#include <stdio.h>
 #include "include/wl_def.h"
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-// PSVITA patch
-#define open(x,y,...) sceIoOpen(x,y,0777)
-#define read sceIoRead
-#define write sceIoWrite
-#define lseek sceIoLseek32
-#define O_CREAT SCE_O_CREAT
-#define O_WRONLY SCE_O_WRONLY
-#define O_RDONLY SCE_O_RDONLY
-#define O_BINARY 0
-#define O_TRUNC SCE_O_TRUNC
-#define SEEK_SET SCE_SEEK_SET
-#define SEEK_CUR SCE_SEEK_CUR
-#define SEEK_END SCE_SEEK_END
-#define close sceIoClose
-#define fstat sceIoGetstatByFd
 static struct timeval t0;
 static long tc0;
 
@@ -52,16 +30,15 @@ unsigned long get_TimeCount()
 	return tc;
 }
 
-long filelength(int handle)
+long filelength(FILE* handle)
 {
-	struct SceIoStat buf;
+	FILE* fd = handle;
+	int rst = ftell(fd);
+	fseek(fd, 0, SEEK_END);
+	int res = ftell(fd);
+	fseek(fd, rst, SEEK_SET);
 	
-	if (fstat(handle, &buf) == -1) {
-		perror("filelength");
-		exit(EXIT_FAILURE);
-	}
-	
-	return buf.st_size;
+	return res;
 }
 
 char *strlwr(char *s)
@@ -220,114 +197,114 @@ uint32_t SwapInt32L(uint32_t i)
 
 /* ** */
 
-int OpenWrite(signed char *fn)
+FILE* OpenWrite(signed char *fn)
 {
-	int fp;
-	
-	fp = open(fn, O_CREAT|O_WRONLY|O_TRUNC|O_BINARY, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-	return fp;
+	char path[256];
+	sprintf(path,"ux0:/data/Wolfenstein 3D/%s", fn);
+	return fopen(path, "wb");
 }
 
-int OpenWriteAppend(signed char *fn)
+FILE* OpenWriteAppend(signed char *fn)
 {
-	int fp;
-	
-	fp = open(fn, O_CREAT|O_WRONLY|O_BINARY, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-	return fp;
+	char path[256];
+	sprintf(path,"ux0:/data/Wolfenstein 3D/%s", fn);
+	return fopen(path, "ab+");
 }
 
-void CloseWrite(int fp)
+void CloseWrite(FILE* fp)
 {
-	close(fp);
+	fclose(fp);
 }
 
-int WriteSeek(int fp, int offset, int whence)
+int WriteSeek(FILE* fp, int offset, int whence)
 {
-	return lseek(fp, offset, whence);
+	return fseek(fp, offset, whence);
 }
 
-int WritePos(int fp)
+int WritePos(FILE* fp)
 {
-	return lseek(fp, 0, SEEK_CUR);
+	return ftell(fp);
 }
 
-int WriteInt8(int fp, int8_t d)
+int WriteInt8(FILE* fp, int8_t d)
 {
-	return write(fp, &d, 1);
+	return fputc(d, fp);
 }
 
-int WriteInt16(int fp, int16_t d)
+int WriteInt16(FILE* fp, int16_t d)
 {
 	int16_t b = SwapInt16L(d);
 	
-	return write(fp, &b, 2) / 2;
+	return fwrite(&b, 1, 2, fp) >> 1;
 }
 
-int WriteInt32(int fp, int32_t d)
+int WriteInt32(FILE* fp, int32_t d)
 {
 	int32_t b = SwapInt32L(d);
 	
-	return write(fp, &b, 4) / 4;
+	return fwrite(&b, 1, 4, fp) >> 2;
 }
 
-int WriteBytes(int fp, byte *d, int len)
+int WriteBytes(FILE* fp, byte *d, int len)
 {
-	return write(fp, d, len);
+	return fwrite(d, 1, len, fp);
 }
 
 
-int OpenRead(signed char *fn)
+FILE* OpenRead(signed char *fn)
 {
-	int fp;
+	FILE* fp;
 	
-	fp = open(fn, O_RDONLY | O_BINARY);
+	char path[256];
+	sprintf(path,"ux0:/data/Wolfenstein 3D/%s", fn);
+	fp = fopen(path, "rb");
 	
 	return fp;
 }
 
-void CloseRead(int fp)
+void CloseRead(FILE* fp)
 {
-	close(fp);
+	fclose(fp);
 }
 
-int ReadSeek(int fp, int offset, int whence)
+int ReadSeek(FILE* fp, int offset, int whence)
 {
-	return lseek(fp, offset, whence);
+	return fseek(fp, offset, whence);
 }
 
-int ReadLength(int fp)
+int ReadLength(FILE* fp)
 {
 	return filelength(fp);
 }
 
-int8_t ReadInt8(int fp)
+int8_t ReadInt8(FILE* fp)
 {
 	byte d[1];
 	
-	read(fp, d, 1);
+	d[0] = fgetc(fp);
 	
 	return d[0];
 }
 
-int16_t ReadInt16(int fp)
+int16_t ReadInt16(FILE* fp)
 {
 	byte d[2];
 	
-	read(fp, d, 2);
+	fread(d, 1, 2, fp);
 	
 	return (d[0]) | (d[1] << 8);
 }
 
-int32_t ReadInt32(int fp)
+int32_t ReadInt32(FILE* fp)
 {
 	byte d[4];
 	
-	read(fp, d, 4);
+	fread(d, 1, 4, fp);
 	
 	return (d[0]) | (d[1] << 8) | (d[2] << 16) | (d[3] << 24);
 }
 
-int ReadBytes(int fp, byte *d, int len)
+int ReadBytes(FILE* fp, byte *d, int len)
 {
-	return read(fp, d, len);
+	return fread(d, 1, len, fp);
 }
