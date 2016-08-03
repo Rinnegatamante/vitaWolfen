@@ -33,13 +33,13 @@ COMMON_OBJS = source/fmopl.o \
 			source/wl_text.o \
 			source/font_data.o \
 			source/font.o \
-			source/automap.o 
+			source/automap.o
 
 CFILES		:=	$(COMMON_OBJS)
 CPPFILES   := $(foreach dir,$(SOURCES), $(wildcard $(dir)/*.cpp))
 BINFILES := $(foreach dir,$(DATA), $(wildcard $(dir)/*.bin))
-OBJS     := $(addsuffix .o,$(BINFILES)) $(CFILES:.c=.o) $(CPPFILES:.cpp=.o) 
-			
+OBJS     := $(addsuffix .o,$(BINFILES)) $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)
+
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CXX      = $(PREFIX)-g++
@@ -50,14 +50,14 @@ ASFLAGS = $(CFLAGS)
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself $< .\release\eboot.bin
+	vita-make-fself $< ./release/eboot.bin
 	vita-mksfoex -s TITLE_ID=$(TITLE) "$(TARGET)" param.sfo
 	cp -f param.sfo ./release/sce_sys/param.sfo
 	cp -f ./assets/startup_$(WMODE).png ./release/sce_sys/livearea/contents/startup.png
 	#------------ Comment this if you don't have 7zip ------------------
-	7z a -tzip ./$(TARGET).vpk -r .\release\sce_sys\* .\release\eboot.bin 
+	7z a -tzip ./$(TARGET).vpk -r ./release/sce_sys/ ./release/eboot.bin
 	#-------------------------------------------------------------------
-	
+
 %.velf: %.elf
 	$(PREFIX)-strip -g $<
 	vita-elf-create $< $@
