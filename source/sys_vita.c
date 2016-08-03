@@ -50,7 +50,7 @@ void DisplayTextSplash(byte *text);
 void exitGame(){
 	vita2d_free_texture(tex_buffer);
 	vita2d_fini();
-	exit(EXIT_FAILURE);
+	sceKernelExitProcess(0);
 }
 
 void Quit(signed char *error)
