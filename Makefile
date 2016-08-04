@@ -1,6 +1,5 @@
 TARGET		:= vitaWolfen
-WMODE		:= 0
-TITLE		:= WOLF0000$(WMODE)
+WMODE		:= 3
 
 LIBS = -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
@@ -50,13 +49,7 @@ ASFLAGS = $(CFLAGS)
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself $< .\release\eboot.bin
-	vita-mksfoex -s TITLE_ID=$(TITLE) "$(TARGET)" param.sfo
-	cp -f param.sfo ./release/sce_sys/param.sfo
-	cp -f ./assets/startup_$(WMODE).png ./release/sce_sys/livearea/contents/startup.png
-	#------------ Comment this if you don't have 7zip ------------------
-	7z a -tzip ./$(TARGET).vpk -r .\release\sce_sys\* .\release\eboot.bin 
-	#-------------------------------------------------------------------
+	vita-make-fself $< .\release\eboot$(WMODE).bin
 	
 %.velf: %.elf
 	$(PREFIX)-strip -g $<
