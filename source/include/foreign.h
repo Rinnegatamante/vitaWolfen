@@ -4,13 +4,13 @@
 #define CURGAME	"You are currently in\n"\
 		"a game. Continuing will\n"\
 		"erase old game. Ok? \n"\
-		"'A'(yes) 'B' (no)"
+		"'X'(yes) 'O' (no)"
 
 #define GAMESVD	"There's already a game\n"\
 		"saved at this position.\n"\
 		"      Overwrite?"
 
-#define ENDGAMESTR	"End the game you are playing? \n ('B' (no) or 'A' (yes):"
+#define ENDGAMESTR	"End the game you are playing? \n ('O' (no) or 'X' (yes):"
 
 #define STR_NG	"New Game"
 #define	STR_SD	"Sound"
@@ -108,15 +108,15 @@
 #define	STR_SEEAGAIN	"Let's see that again!"
 
 #ifdef SPEAR
-#define ENDSTR1	"Heroes don't quit, but \n go ahead and press 'A' \n if you aren't one."
-#define ENDSTR2	"Press 'A' to quit,\n or press 'B' to enjoy \n more violent diversion."
-#define ENDSTR3	"Depressing the 'A' key means \n you must return to the \n humdrum workday world."
-#define ENDSTR4	"Hey, quit or play, \n 'A' (yes) or 'B' (no) : \n it's your choice."
-#define ENDSTR5	"Sure you don't want to \n waste a few more \n productive hours? \n 'A' (yes) or 'B' (no)"
-#define ENDSTR6	"I think you had better \n play some more. Please \n press 'B'...please?"
-#define ENDSTR7	"If you are tough, press 'A'. \n If not, press 'B' daintily."
-#define ENDSTR8	"I'm thinkin' that \n you might wanna press 'B' \n to play more. You do it."
-#define ENDSTR9	"Sure. Fine. Quit. \n See if we care. \n Get it over with. \n Press 'A'."
+#define ENDSTR1	"Heroes don't quit, but \n go ahead and press 'X' \n if you aren't one."
+#define ENDSTR2	"Press 'X' to quit,\n or press 'O' to enjoy \n more violent diversion."
+#define ENDSTR3	"Depressing the 'X' key means \n you must return to the \n humdrum workday world."
+#define ENDSTR4	"Hey, quit or play, \n 'X' (yes) or 'O' (no) : \n it's your choice."
+#define ENDSTR5	"Sure you don't want to \n waste a few more \n productive hours? \n 'X' (yes) or 'O' (no)"
+#define ENDSTR6	"I think you had better \n play some more. Please \n press 'O'...please?"
+#define ENDSTR7	"If you are tough, press 'X'. \n If not, press 'O' daintily."
+#define ENDSTR8	"I'm thinkin' that \n you might wanna press 'O' \n to play more. You do it."
+#define ENDSTR9	"Sure. Fine. Quit. \n See if we care. \n Get it over with. \n Press 'X'."
 
 #define STR_ENDGAME1 "We owe you a great debt, Mr. Blazkowicz."
 #define STR_ENDGAME2 "You have served your country well."
@@ -125,15 +125,15 @@
 
 #else
 
-#define ENDSTR1	"Heroes don't quit, but \n go ahead and press 'A' \n if you aren't one."
-#define ENDSTR2	"Press 'A' to quit,\n or press 'B' to enjoy \n more violent diversion."
-#define ENDSTR3	"Depressing the 'A' key means \n you must return to the \n humdrum workday world."
-#define ENDSTR4	"Hey, quit or play, \n 'A' (yes) or 'B' (no) : \n it's your choice."
-#define ENDSTR5	"Sure you don't want to \n waste a few more \n productive hours? \n 'A' (yes) or 'B' (no)"
-#define ENDSTR6	"I think you had better \n play some more. Please \n press 'B'...please?"
-#define ENDSTR7	"If you are tough, press 'A'. \n If not, press 'B' daintily."
-#define ENDSTR8	"I'm thinkin' that \n you might wanna press 'B' \n to play more. You do it."
-#define ENDSTR9	"Sure. Fine. Quit. \n See if we care. \n Get it over with. \n Press 'A'."
+#define ENDSTR1	"Heroes don't quit, but \n go ahead and press 'X' \n if you aren't one."
+#define ENDSTR2	"Press 'X' to quit,\n or press 'O' to enjoy \n more violent diversion."
+#define ENDSTR3	"Depressing the 'X' key means \n you must return to the \n humdrum workday world."
+#define ENDSTR4	"Hey, quit or play, \n 'X' (yes) or 'O' (no) : \n it's your choice."
+#define ENDSTR5	"Sure you don't want to \n waste a few more \n productive hours? \n 'X' (yes) or 'O' (no)"
+#define ENDSTR6	"I think you had better \n play some more. Please \n press 'O'...please?"
+#define ENDSTR7	"If you are tough, press 'X'. \n If not, press 'O' daintily."
+#define ENDSTR8	"I'm thinkin' that \n you might wanna press 'O' \n to play more. You do it."
+#define ENDSTR9	"Sure. Fine. Quit. \n See if we care. \n Get it over with. \n Press 'X'."
 #endif
 
 #endif
