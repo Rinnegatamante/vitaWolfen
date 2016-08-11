@@ -1,7 +1,7 @@
 TARGET		:= vitaWolfen
-WMODE		:= 3
+WMODE		:= 0
 
-LIBS = -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
+LIBS = -lSDL2 -lSceAudio_stub -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
 	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc \
 	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz
@@ -14,7 +14,7 @@ COMMON_OBJS = source/fmopl.o \
 			source/misc.o \
 			source/objs.o \
 			source/sd_comm.o \
-			source/sd_null.o \
+			source/sd_psp2.o \
 			source/vi_vita.o \
 			source/sys_vita.o \
 			source/wl_act1.o \
