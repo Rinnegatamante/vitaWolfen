@@ -317,9 +317,9 @@ void INL_Update()
 	int left_x = kDown.lx - 127;
 	int left_y = kDown.ly - 127;
 	int right_x = kDown.rx - 127;
-	camera_x = (abs(right_x) < 10 ? 0 : right_x) * 10 /(13-mouseadjustment);
-	move_x = (abs(left_x) < 10 ? 0 : left_x >> 1) * 10 /(13-mouseadjustment);
-	move_y = (abs(left_y) < 15 ? 0 : left_y >> 1) * 10 /(13-mouseadjustment);
+	camera_x = (abs(right_x) < 50 ? 0 : right_x) * 8 /(13-mouseadjustment);
+	move_x = (abs(left_x) < 50 ? 0 : left_x >> 1) * 8 /(13-mouseadjustment);
+	move_y = (abs(left_y) < 50 ? 0 : left_y >> 1) * 8 /(13-mouseadjustment);
 	
 }
 
