@@ -1,7 +1,7 @@
 TARGET		:= vitaWolfen
 WMODE		:= 0
 
-LIBS = -lSDL2 -lSceAudio_stub -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
+LIBS = -lSceAudio_stub -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
 	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc \
 	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz
