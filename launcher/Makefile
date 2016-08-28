@@ -24,7 +24,7 @@ ASFLAGS = $(CFLAGS)
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself $< ..\release\eboot.bin
+	vita-make-fself -s $< ..\release\eboot.bin
 	vita-mksfoex -s TITLE_ID=$(TITLE) "$(TARGET)" param.sfo
 	cp -f param.sfo ../release/sce_sys/param.sfo
 	

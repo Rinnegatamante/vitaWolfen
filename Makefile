@@ -49,7 +49,7 @@ ASFLAGS = $(CFLAGS)
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself $< .\release\eboot$(WMODE).bin
+	vita-make-fself -s $< .\release\eboot$(WMODE).bin
 	
 %.velf: %.elf
 	$(PREFIX)-strip -g $<
