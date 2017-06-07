@@ -557,8 +557,8 @@ statetype gamestates[MAXSTATES] = {
 /* s_fakeshoot8  */	{false,SPR_FAKE_SHOOT,8,NULL,T_FakeFire,s_fakeshoot9},
 /* s_fakeshoot9  */	{false,SPR_FAKE_SHOOT,8,NULL,NULL,s_fakechase1},
 
-/* s_fire1  */	{false,SPR_FIRE1,6,NULL,T_Projectile,s_fire2},
-/* s_fire2  */	{false,SPR_FIRE2,6,NULL,T_Projectile,s_fire1},
+/* s_fire1  */	{false,SPR_FIRE1,6,T_Projectile,NULL,s_fire2},
+/* s_fire2  */	{false,SPR_FIRE2,6,T_Projectile,NULL,s_fire1},
 
 
 /* s_mechastand */	{false,SPR_MECHA_W1,0,T_Stand,NULL,s_mechastand},
