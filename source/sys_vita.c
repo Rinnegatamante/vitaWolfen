@@ -1,8 +1,6 @@
 #include "include/wl_def.h"
+#include <vitasdk.h>
 #include <vita2d.h>
-#include <psp2/ctrl.h>
-#include <psp2/display.h>
-#include <psp2/kernel/processmgr.h>
 #include <stdio.h>
 
 byte *gfxbuf = NULL;

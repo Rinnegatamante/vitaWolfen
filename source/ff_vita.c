@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <psp2/io/fcntl.h>
-#include <psp2/io/stat.h>
-#include <psp2/io/dirent.h>
+#include <vitasdk.h>
 #ifdef USE_DMALLOC
 #include<dmalloc.h>
 #endif

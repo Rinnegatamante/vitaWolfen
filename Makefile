@@ -1,9 +1,9 @@
 TARGET		:= vitaWolfen
 WMODE		:= 0
 
-LIBS = -lSceAudio_stub -lvita2d -lSceKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
+LIBS = -lSceAudio_stub -lvita2d -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
-	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc \
+	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc -lvitashaders \
 	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz
 
 COMMON_OBJS = source/fmopl.o \
@@ -42,7 +42,7 @@ OBJS     := $(addsuffix .o,$(BINFILES)) $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CXX      = $(PREFIX)-g++
-CFLAGS  = -Wl,-q -O3 -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE)
+CFLAGS  = -Wl,-q -O3 -g -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE)
 CXXFLAGS  = $(CFLAGS) -fno-exceptions
 ASFLAGS = $(CFLAGS)
 
@@ -52,6 +52,7 @@ $(TARGET).vpk: $(TARGET).velf
 	vita-make-fself -s $< .\release\eboot$(WMODE).bin
 	
 %.velf: %.elf
+	cp $< $<.unstripped.elf
 	$(PREFIX)-strip -g $<
 	vita-elf-create $< $@
 

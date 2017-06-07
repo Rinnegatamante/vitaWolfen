@@ -1,7 +1,6 @@
 #include "include/wl_def.h"
 
-#include <psp2/audioout.h>
-#include <psp2/types.h>
+#include <vitasdk.h>
 //#include <pthread.h>
 //#include <sys/ioctl.h>
 //#include <sys/soundcard.h>
