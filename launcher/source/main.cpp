@@ -22,6 +22,7 @@ int main(){
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui_ImplVitaGL_Init();
+	ImGui_ImplVitaGL_TouchUsage(true);
 	ImGui::StyleColorsDark();
 	
 	avail[0] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.wl1", SCE_O_RDONLY, 0777);
@@ -47,8 +48,14 @@ int main(){
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spare of Destiny Full", nullptr, false, avail[3] >= 0)){
 				exit_code = 3;
 			}
+			if (ImGui::MenuItem("Exit vitaWolfen")){
+				exit_code = 0xBEEF;
+			}
             ImGui::EndMenu();
         }
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(870);
+		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate); 
         ImGui::EndMainMenuBar();
 	}
 		
