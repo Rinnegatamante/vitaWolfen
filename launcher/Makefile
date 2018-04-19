@@ -2,12 +2,11 @@ TARGET		:= vitaWolfen
 WMODE		:= 1
 TITLE		:= WOLF00001
 
-LIBS = -lvita2d -lSceAppmgr_stub -lSceDisplay_stub -lSceGxm_stub	\
-	-lSceSysmodule_stub -lSceCtrl_stub -lm \
-	-lScePgf_stub -ljpeg -lfreetype -lc \
-	-lSceCommonDialog_stub -lpng16 -lz
+LIBS = -limgui -lvitagl -lSceAppmgr_stub -lSceDisplay_stub -lSceGxm_stub \
+	-lSceSysmodule_stub -lSceCtrl_stub -lm -lc -lSceCommonDialog_stub -lz \
+	-lSceTouch_stub
 
-COMMON_OBJS = source/main.o source/font.o source/font_data.o
+COMMON_OBJS = source/main.o
 
 CFILES		:=	$(COMMON_OBJS)
 CPPFILES   := $(foreach dir,$(SOURCES), $(wildcard $(dir)/*.cpp))
