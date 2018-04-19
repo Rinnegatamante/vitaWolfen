@@ -14,6 +14,8 @@
 
 #define FOCALLENGTH     0x5800		/* in global coordinates */
 
+extern objtype *new;
+
 signed char str[80], str2[20];
 
 int viewwidth, viewheight;

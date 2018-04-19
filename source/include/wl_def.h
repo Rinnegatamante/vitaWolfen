@@ -9,12 +9,7 @@
 #include <psp2/io/fcntl.h>
 #include <psp2/io/stat.h>
 #include <psp2/io/dirent.h>
-#include "../font.h"
 #include <stdarg.h> 
-
-extern void gpu_printf (const char *format, ...);
-
-#define printf gpu_printf
 
 extern int vwidth, vheight, vstride; /* size of screen */
 
@@ -777,7 +772,7 @@ extern	exit_t		playstate;
 
 extern	boolean		madenoise;
 
-extern	objtype 	objlist[MAXACTORS],*new,*obj,*player,*lastobj,
+extern	objtype 	objlist[MAXACTORS],*obj,*player,*lastobj,
 					*objfreelist,*killerobj;
 extern	statobj_t	statobjlist[MAXSTATS],*laststatobj;
 extern	doorobj_t	doorobjlist[MAXDOORS],*lastdoorobj;
@@ -1022,6 +1017,10 @@ void SpawnHitler (int tilex, int tiley);
 
 extern void HelpScreens();
 extern void EndText();
+
+int WriteConfig();
+void keyboard_handler(int code, int press);
+boolean InternalKeyboard[NumCodes];
 
 #include "wl_act3.h"
 

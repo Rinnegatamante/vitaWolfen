@@ -13,6 +13,8 @@
 #define BJRUNSPEED	2048
 #define BJJUMPSPEED	680
 
+extern objtype *new;
+
 /*
 =============================================================================
 

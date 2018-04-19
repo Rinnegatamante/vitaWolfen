@@ -8,6 +8,7 @@
 =============================================================================
 */
 
+extern objtype *new;
 
 static dirtype opposite[9] =
 	{west,southwest,south,southeast,east,northeast,north,northwest,nodir};

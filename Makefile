@@ -1,9 +1,9 @@
 TARGET		:= vitaWolfen
 WMODE		:= 0
 
-LIBS = -lSceAudio_stub -lvita2d -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
+LIBS = -limgui -lvitaGL -lSceAudio_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
-	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc -lvitashaders \
+	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc \
 	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz
 
 COMMON_OBJS = source/fmopl.o \
@@ -30,8 +30,6 @@ COMMON_OBJS = source/fmopl.o \
 			source/wl_play.o \
 			source/wl_state.o \
 			source/wl_text.o \
-			source/font_data.o \
-			source/font.o \
 			source/automap.o 
 
 CFILES		:=	$(COMMON_OBJS)
@@ -42,7 +40,7 @@ OBJS     := $(addsuffix .o,$(BINFILES)) $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CXX      = $(PREFIX)-g++
-CFLAGS  = -Wl,-q -O3 -g -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE)
+CFLAGS  = -Wl,-q -O3 -g -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE) -flto
 CXXFLAGS  = $(CFLAGS) -fno-exceptions
 ASFLAGS = $(CFLAGS)
 

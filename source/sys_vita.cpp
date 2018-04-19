@@ -1,13 +1,13 @@
-#include "include/wl_def.h"
+extern "C"{
+	#include "include/wl_def.h"
+}
 #include <vitasdk.h>
-#include <vita2d.h>
+#include <vitaGL.h>
+#include <imgui_vita.h>
 #include <stdio.h>
 
 byte *gfxbuf = NULL;
 static unsigned char pal[768];
-
-extern void keyboard_handler(int code, int press);
-extern boolean InternalKeyboard[NumCodes];
 
 SceUInt16 d_8to16table[256];
 int vwidth = 960;
@@ -15,15 +15,17 @@ int vheight = 544;
 int vstride = 960;
 int camera_x, move_x, move_y;
 char path[256];
-vita2d_texture* tex_buffer;
 
-int main (int argc, signed char *argv[])
+int main (int argc, char ** argv)
 {
 
 	// Init GPU
-	vita2d_init();
-	vita2d_set_clear_color(RGBA8(0x00, 0x00, 0x00, 0xFF));
-	vita2d_set_vblank_wait(0);
+	vglInit(0x100000);
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui_ImplVitaGL_Init();
+	ImGui::StyleColorsDark();
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	
 	// Set main directory
 	strcpy(path,"ux0:/data/Wolfenstein 3D/");
@@ -32,7 +34,7 @@ int main (int argc, signed char *argv[])
 	scePowerSetArmClockFrequency(444);
 	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG);
 	
-	return WolfMain(argc, argv);
+	return WolfMain(argc, (signed char **)argv);
 }
 
 void DisplayTextSplash(byte *text);
@@ -46,8 +48,6 @@ void DisplayTextSplash(byte *text);
 */
 
 void exitGame(){
-	vita2d_free_texture(tex_buffer);
-	vita2d_fini();
 	sceKernelExitProcess(0);
 }
 
@@ -85,14 +85,40 @@ void VL_WaitVBL(int vbls)
 	while (last > get_TimeCount()) ;
 }
 
+GLuint texture;
+uint32_t *tex_buffer;
+SceUInt32 palette_tbl[256];
+
 void VW_UpdateScreen()
 {
-
-	vita2d_start_drawing();
-	vita2d_draw_texture(tex_buffer, 0, 0);
-	vita2d_end_drawing();
-	vita2d_swap_buffers();
-	sceDisplayWaitVblankStart();
+	for (int y = 0; y < vheight; y++){
+		for (int x = 0; x < vwidth; x++){
+			int i = x + y * vwidth;
+			tex_buffer[i] = palette_tbl[gfxbuf[i]];
+		}
+	}
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, vwidth, vheight, GL_RGBA, GL_UNSIGNED_BYTE, tex_buffer);
+	vglStartRendering();
+	ImGui_ImplVitaGL_NewFrame();
+	if (ImGui::BeginMainMenuBar()){
+        if (ImGui::BeginMenu("Launcher")){
+            if (ImGui::MenuItem("Launch Shareware")){
+                
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+	}
+	ImGui::SetNextWindowPos(ImVec2(0, 19), ImGuiSetCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(960, 525), ImGuiSetCond_Always);
+	ImGui::Begin("", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
+	ImGui::Image(reinterpret_cast<void *>(texture), ImVec2(960, 525));
+	ImGui::End();
+	glViewport(0, 0, static_cast<int>(ImGui::GetIO().DisplaySize.x), static_cast<int>(ImGui::GetIO().DisplaySize.y));
+	ImGui::Render();
+	ImGui_ImplVitaGL_RenderDrawData(ImGui::GetDrawData());
+	vglStopRendering();
+	
 }
 
 /*
@@ -107,8 +133,10 @@ void VL_Startup()
 {	
 	
 	// Init GPU texture
-	tex_buffer = vita2d_create_empty_texture_format(vwidth, vheight, SCE_GXM_TEXTURE_BASE_FORMAT_P8);
-	gfxbuf = vita2d_texture_get_datap(tex_buffer);
+	glGenTextures(1, &texture);
+	tex_buffer = (uint32_t*)malloc(vwidth * vheight * 4);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, vwidth, vheight, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_buffer);
+	gfxbuf = (byte*)malloc(vwidth * vheight);
 
 }
 
@@ -122,6 +150,7 @@ void VL_Startup()
 
 void VL_Shutdown()
 {
+	vglEnd();
 }
 
 /* ======================================================================== */
@@ -138,7 +167,7 @@ void VL_SetPalette(const byte *palette)
 {
 	VL_WaitVBL(1);
 	int i;
-	SceUInt32* palette_tbl = vita2d_texture_get_palette(tex_buffer);
+	
 	const SceUInt8* pal = palette;
 	unsigned r, g, b;
 	
