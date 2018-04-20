@@ -4,7 +4,7 @@ WMODE		:= 0
 LIBS = -limgui -lvitaGL -lSceAudio_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
 	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc \
-	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz
+	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz -lSceAppmgr_stub
 
 COMMON_OBJS = source/fmopl.o \
 			source/ff_vita.o \
