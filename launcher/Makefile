@@ -28,7 +28,7 @@ $(TARGET).vpk: $(TARGET).velf
 	cp -f param.sfo ../release/sce_sys/param.sfo
 	
 	#------------ Comment this if you don't have 7zip ------------------
-	7z a -tzip ./$(TARGET).vpk -r ..\release\sce_sys\* ..\release\eboot1.bin ..\release\eboot2.bin ..\release\eboot3.bin ..\release\eboot0.bin ..\release\eboot.bin 
+	7z a -tzip ./$(TARGET).vpk -r ..\release\sce_sys\* ..\release\shaders\* ..\release\eboot1.bin ..\release\eboot2.bin ..\release\eboot3.bin ..\release\eboot0.bin ..\release\eboot.bin 
 	#-------------------------------------------------------------------
 	
 %.velf: %.elf

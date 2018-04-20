@@ -16,6 +16,20 @@ int vstride = 960;
 int camera_x, move_x, move_y;
 char path[256];
 bool avail[4];
+GLuint fs, vs, program;
+
+void* GL_LoadShader(const char* filename, GLboolean fragment){
+	FILE* f = fopen(filename, "rb");
+	fseek(f, 0, SEEK_END);
+	long int size = ftell(f);
+	fseek(f, 0, SEEK_SET);
+	void* res = malloc(size);
+	fread(res, 1, size, f);
+	fclose(f);
+	if (fragment) glShaderBinary(1, &fs, 0, res, size);
+	else glShaderBinary(1, &vs, 0, res, size);
+	free(res);
+}
 
 int main (int argc, char ** argv)
 {
@@ -34,11 +48,28 @@ int main (int argc, char ** argv)
 	avail[3] = (fd >= 0);
 	sceIoClose(fd);
 	
-	// Init vitaGL and ImGui
+	// Init vitaGL
 	vglInit(0x100000);
+	
+	// Setup shaders
+	fs = glCreateShader(GL_FRAGMENT_SHADER);
+	vs = glCreateShader(GL_VERTEX_SHADER);
+	GL_LoadShader("app0:shaders/modulate_rgba_f.gxp", GL_TRUE);
+	GL_LoadShader("app0:shaders/texture2d_rgba_v.gxp", GL_FALSE);
+	program = glCreateProgram();
+	glAttachShader(program, fs);
+	glAttachShader(program, vs);
+	vglBindAttribLocation(program, 0, "position", 3, GL_FLOAT);
+	vglBindAttribLocation(program, 1, "texcoord", 2, GL_FLOAT);
+	vglBindAttribLocation(program, 2, "color", 4, GL_UNSIGNED_BYTE);
+	glLinkProgram(program);
+	glUseProgram(program);
+	
+	// Init ImGui
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplVitaGL_Init();
+	ImGui_ImplVitaGL_UseCustomShader(true);
 	ImGui_ImplVitaGL_TouchUsage(true);
 	ImGui_ImplVitaGL_KeysUsage(false);
 	ImGui::StyleColorsDark();
