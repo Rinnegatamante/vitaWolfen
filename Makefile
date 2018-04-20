@@ -1,61 +1,15 @@
-TARGET		:= vitaWolfen
-WMODE		:= 0
-
-LIBS = -limgui -lvitaGL -lSceAudio_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
-	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub \
-	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc \
-	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz -lSceAppmgr_stub
-
-COMMON_OBJS = source/fmopl.o \
-			source/ff_vita.o \
-			source/id_ca.o \
-			source/id_us.o \
-			source/id_vh.o \
-			source/misc.o \
-			source/objs.o \
-			source/sd_comm.o \
-			source/sd_psp2.o \
-			source/vi_vita.o \
-			source/sys_vita.o \
-			source/wl_act1.o \
-			source/wl_act2.o \
-			source/wl_act3.o \
-			source/wl_agent.o \
-			source/wl_debug.o \
-			source/wl_draw.o \
-			source/wl_game.o \
-			source/wl_inter.o \
-			source/wl_main.o \
-			source/wl_menu.o \
-			source/wl_play.o \
-			source/wl_state.o \
-			source/wl_text.o \
-			source/automap.o 
-
-CFILES		:=	$(COMMON_OBJS)
-CPPFILES   := $(foreach dir,$(SOURCES), $(wildcard $(dir)/*.cpp))
-BINFILES := $(foreach dir,$(DATA), $(wildcard $(dir)/*.bin))
-OBJS     := $(addsuffix .o,$(BINFILES)) $(CFILES:.c=.o) $(CPPFILES:.cpp=.o) 
-			
-PREFIX  = arm-vita-eabi
-CC      = $(PREFIX)-gcc
-CXX      = $(PREFIX)-g++
-CFLAGS  = -Wl,-q -O3 -g -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE) -flto
-CXXFLAGS  = $(CFLAGS) -fno-exceptions
-ASFLAGS = $(CFLAGS)
-
-all: $(TARGET).vpk
-
-$(TARGET).vpk: $(TARGET).velf
-	vita-make-fself -s $< .\release\eboot$(WMODE).bin
+all:
+	make WMODE=0 -f Makefile.core
+	make clean -f Makefile.core
+	make WMODE=1 -f Makefile.core
+	make clean -f Makefile.core
+	make WMODE=2 -f Makefile.core
+	make clean -f Makefile.core
+	make WMODE=3 -f Makefile.core
+	make clean -f Makefile.core
+	make -C launcher
+	cp launcher/vitaWolfen.vpk vitaWolfen.vpk
 	
-%.velf: %.elf
-	cp $< $<.unstripped.elf
-	$(PREFIX)-strip -g $<
-	vita-elf-create $< $@
-
-$(TARGET).elf: $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ $(LIBS) -o $@
-
 clean:
-	@rm -rf $(TARGET).velf $(TARGET).elf $(OBJS) param.sfo eboot.bin
+	make clean -f Makefile.core
+	make -C launcher clean
