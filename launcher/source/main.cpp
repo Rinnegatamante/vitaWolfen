@@ -42,10 +42,10 @@ int main(){
 			if (ImGui::MenuItem("Launch Wolfenstein 3D Full", nullptr, false, avail[1] >= 0)){
 				exit_code = 1;
 			}
-			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spare of Destiny Shareware", nullptr, false, avail[2] >= 0)){
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Shareware", nullptr, false, avail[2] >= 0)){
 				exit_code = 2;
 			}
-			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spare of Destiny Full", nullptr, false, avail[3] >= 0)){
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Full", nullptr, false, avail[3] >= 0)){
 				exit_code = 3;
 			}
 			if (ImGui::MenuItem("Exit vitaWolfen")){
@@ -87,12 +87,12 @@ int main(){
 			}
 		}
 		if (avail[2] >= 0){
-			if (ImGui::Button("Launch Wolfenstein 3D: Spare of Destiny Shareware")){
+			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Shareware")){
 				exit_code = 2;
 			}
 		}
 		if (avail[3] >= 0){
-			if (ImGui::Button("Launch Wolfenstein 3D: Spare of Destiny Full")){
+			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Full")){
 				exit_code = 3;
 			}
 		}

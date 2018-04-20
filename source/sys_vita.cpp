@@ -126,10 +126,10 @@ void VW_UpdateScreen()
 			if (ImGui::MenuItem("Launch Wolfenstein 3D Full", nullptr, false, avail[1])){
 				sceAppMgrLoadExec("app0:/eboot1.bin", NULL, NULL);
 			}
-			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spare of Destiny Shareware", nullptr, false, avail[2])){
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Shareware", nullptr, false, avail[2])){
 				sceAppMgrLoadExec("app0:/eboot2.bin", NULL, NULL);
 			}
-			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spare of Destiny Full", nullptr, false, avail[3])){
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Full", nullptr, false, avail[3])){
 				sceAppMgrLoadExec("app0:/eboot3.bin", NULL, NULL);
 			}
 			if (ImGui::MenuItem("Exit vitaWolfen")){
