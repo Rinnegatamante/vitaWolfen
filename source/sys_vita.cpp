@@ -50,7 +50,7 @@ int main (int argc, char ** argv)
 	
 	// Enabling 444 MHZ mode and Analogs support
 	scePowerSetArmClockFrequency(444);
-	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG);
+	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG_WIDE);
 	
 	return WolfMain(argc, (signed char **)argv);
 }
