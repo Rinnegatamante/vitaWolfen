@@ -10,26 +10,13 @@ byte *gfxbuf = NULL;
 static unsigned char pal[768];
 
 SceUInt16 d_8to16table[256];
-int vwidth = 960;
-int vheight = 544;
-int vstride = 960;
+int vwidth = 480;
+int vheight = 272;
+int vstride = 480;
 int camera_x, move_x, move_y;
 char path[256];
 bool avail[4];
 GLuint fs, vs, program;
-
-void* GL_LoadShader(const char* filename, GLboolean fragment){
-	FILE* f = fopen(filename, "rb");
-	fseek(f, 0, SEEK_END);
-	long int size = ftell(f);
-	fseek(f, 0, SEEK_SET);
-	void* res = malloc(size);
-	fread(res, 1, size, f);
-	fclose(f);
-	if (fragment) glShaderBinary(1, &fs, 0, res, size);
-	else glShaderBinary(1, &vs, 0, res, size);
-	free(res);
-}
 
 int main (int argc, char ** argv)
 {
@@ -51,27 +38,13 @@ int main (int argc, char ** argv)
 	// Init vitaGL
 	vglInit(0x100000);
 	
-	// Setup shaders
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	GL_LoadShader("app0:shaders/modulate_rgba_f.gxp", GL_TRUE);
-	GL_LoadShader("app0:shaders/texture2d_rgba_v.gxp", GL_FALSE);
-	program = glCreateProgram();
-	glAttachShader(program, fs);
-	glAttachShader(program, vs);
-	vglBindAttribLocation(program, 0, "position", 3, GL_FLOAT);
-	vglBindAttribLocation(program, 1, "texcoord", 2, GL_FLOAT);
-	vglBindAttribLocation(program, 2, "color", 4, GL_UNSIGNED_BYTE);
-	glLinkProgram(program);
-	glUseProgram(program);
-	
 	// Init ImGui
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplVitaGL_Init();
-	ImGui_ImplVitaGL_UseCustomShader(true);
 	ImGui_ImplVitaGL_TouchUsage(true);
 	ImGui_ImplVitaGL_KeysUsage(false);
+    ImGui_ImplVitaGL_UseIndirectFrontTouch(true);
 	ImGui::StyleColorsDark();
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	io.MouseDrawCursor = false;
@@ -137,6 +110,7 @@ void VL_WaitVBL(int vbls)
 GLuint texture;
 uint32_t *tex_buffer;
 SceUInt32 palette_tbl[256];
+uint64_t tmr1;
 
 void VW_UpdateScreen()
 {
@@ -182,6 +156,14 @@ void VW_UpdateScreen()
 	ImGui::Render();
 	ImGui_ImplVitaGL_RenderDrawData(ImGui::GetDrawData());
 	vglStopRendering();
+    
+    SceTouchData touch;
+    sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
+    uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
+    if (touch.reportNum > 0){
+        ImGui::GetIO().MouseDrawCursor = true;
+        tmr1 = sceKernelGetProcessTimeWide();
+    }else if (delta_touch < 1000000) ImGui::GetIO().MouseDrawCursor = false;
 	
 }
 
@@ -268,38 +250,12 @@ void VL_GetPalette(byte *palette)
 static int mx = 0;
 static int my = 0;
 static int weapon;
+uint32_t oldpad;
 void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
-	if( keys & SCE_CTRL_SELECT){ // Swap Weapons / Confirm Savegames
-		if (state == 1){
-			weapon = gamestate.weapon;
-			if (gamestate.weapon == 0){
-				keyboard_handler(sc_1, 0);
-				keyboard_handler(sc_2, 1);
-				keyboard_handler(sc_3, 0); 
-				keyboard_handler(sc_4, 0);
-			}else if (gamestate.weapon == 1){
-				keyboard_handler(sc_1, 0);
-				keyboard_handler(sc_2, 0);
-				keyboard_handler(sc_3, 1); 
-				keyboard_handler(sc_4, 0);
-			}else if (gamestate.weapon == 2){
-				keyboard_handler(sc_1, 0);
-				keyboard_handler(sc_2, 0);
-				keyboard_handler(sc_3, 0); 
-				keyboard_handler(sc_4, 1);
-			}else{
-				keyboard_handler(sc_1, 1);
-				keyboard_handler(sc_2, 0);
-				keyboard_handler(sc_3, 0); 
-				keyboard_handler(sc_4, 0);
-			}
-		}else{
-			if (gamestate.weapon == weapon) keyboard_handler(sc_1, 1); 
-			else keyboard_handler(sc_1, 0); 
-			keyboard_handler(sc_2, 0);
-			keyboard_handler(sc_3, 0); 
-			keyboard_handler(sc_4, 0);
-		}
+	if(keys & SCE_CTRL_SELECT){ // Swap Weapons / Confirm Savegames
+        gamestate.weapon =
+		gamestate.chosenweapon =
+        gamestate.bestweapon = wp_knife;
 		keyboard_handler(sc_Enter, state);
 	}
 	if( keys & SCE_CTRL_CROSS){ // Yes button/Fire
@@ -356,8 +312,7 @@ void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 				keyboard_handler(sc_4, 0);
 			}
 		}else{
-			if (gamestate.weapon == weapon) keyboard_handler(sc_1, 1); 
-			else keyboard_handler(sc_1, 0); 
+			keyboard_handler(sc_1, 0); 
 			keyboard_handler(sc_2, 0);
 			keyboard_handler(sc_3, 0); 
 			keyboard_handler(sc_4, 0);
@@ -368,26 +323,7 @@ void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 		keyboard_handler(sc_Y, state); 
 		keyboard_handler(sc_Control, state);
 	}
-	/*if (keys & KEY_TOUCH){ // Touchscreen support
-		if (state == 1) INL_ReadTouch();
-		else{
-			keyboard_handler(sc_LeftArrow, 0);
-			keyboard_handler(sc_RightArrow, 0);
-		}
-	}*/
 }
-
-/*void INL_ReadTouch(){
-	touchPosition cpos;
-	hidTouchRead(&cpos);
-	if (cpos.px < 160){
-		keyboard_handler(sc_LeftArrow, 1);
-		keyboard_handler(sc_RightArrow, 0);
-	}else{
-		keyboard_handler(sc_RightArrow, 1);
-		keyboard_handler(sc_LeftArrow, 0);
-	}
-}*/
 
 void INL_Update()
 {
@@ -396,18 +332,21 @@ void INL_Update()
 	static int mu = 0;
 	static int md = 0;
 	
-	SceCtrlData kDown, kUp;
-	sceCtrlPeekBufferPositive(0, &kDown, 1);
-	sceCtrlPeekBufferNegative(0, &kUp, 1);
-	if(kUp.buttons)
-		INL_SetKeys(kUp.buttons, 0);
-	if(kDown.buttons)
-		INL_SetKeys(kDown.buttons, 1);
+    SceCtrlData pad;
+	sceCtrlPeekBufferPositive(0, &pad, 1);
+    uint32_t kDown = pad.buttons;
+	uint32_t kUp = oldpad;
+    if(kDown)
+		INL_SetKeys(kDown, 1);
+	if(kUp != kDown)
+		INL_SetKeys(kUp, 0);
 	
+    oldpad = pad.buttons;
+    
 	// Analogs Support
-	int left_x = kDown.lx - 127;
-	int left_y = kDown.ly - 127;
-	int right_x = kDown.rx - 127;
+	int left_x = pad.lx - 127;
+	int left_y = pad.ly - 127;
+	int right_x = pad.rx - 127;
 	camera_x = (abs(right_x) < 50 ? 0 : right_x) * 8 /(13-mouseadjustment);
 	move_x = (abs(left_x) < 50 ? 0 : left_x >> 1) * 8 /(13-mouseadjustment);
 	move_y = (abs(left_y) < 50 ? 0 : left_y >> 1) * 8 /(13-mouseadjustment);
