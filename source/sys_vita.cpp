@@ -52,8 +52,10 @@ int main (int argc, char ** argv)
 	// Set main directory
 	strcpy(path,"ux0:/data/Wolfenstein 3D/");
 	
-	// Enabling 444 MHZ mode and Analogs support
 	scePowerSetArmClockFrequency(444);
+    scePowerSetBusClockFrequency(222);
+	scePowerSetGpuClockFrequency(222);
+    scePowerSetGpuXbarClockFrequency(166);
 	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG_WIDE);
 	
 	return WolfMain(argc, (signed char **)argv);
