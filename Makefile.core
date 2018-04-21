@@ -40,7 +40,7 @@ PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CXX      = $(PREFIX)-g++
 CFLAGS  = -Wl,-q -O3 -g -DSKIPFADE -DHAVE_FFBLK -DDOSISM -DWMODE=$(WMODE) -flto
-CXXFLAGS  = $(CFLAGS) -fno-exceptions
+CXXFLAGS  = $(CFLAGS) -fno-exceptions -fpermissive
 ASFLAGS = $(CFLAGS)
 
 all: $(TARGET).vpk

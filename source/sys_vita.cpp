@@ -125,7 +125,14 @@ void VW_UpdateScreen()
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, vwidth, vheight, GL_RGBA, GL_UNSIGNED_BYTE, tex_buffer);
 	vglStartRendering();
 	ImGui_ImplVitaGL_NewFrame();
-	if (ImGui::BeginMainMenuBar()){
+	
+	ImGui::SetNextWindowPos(ImVec2(0, 19), ImGuiSetCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(960, 525), ImGuiSetCond_Always);
+	ImGui::Begin("", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
+	ImGui::Image(reinterpret_cast<void *>(texture), ImVec2(960, 525));
+	ImGui::End();
+    
+    if (ImGui::BeginMainMenuBar()){
         if (ImGui::BeginMenu("Launcher")){
             if (ImGui::MenuItem("Launch Wolfenstein 3D Shareware", nullptr, false, avail[0])){
 				sceAppMgrLoadExec("app0:/eboot0.bin", NULL, NULL);
@@ -149,11 +156,7 @@ void VW_UpdateScreen()
 		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate); 
         ImGui::EndMainMenuBar();
 	}
-	ImGui::SetNextWindowPos(ImVec2(0, 19), ImGuiSetCond_Always);
-	ImGui::SetNextWindowSize(ImVec2(960, 525), ImGuiSetCond_Always);
-	ImGui::Begin("", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
-	ImGui::Image(reinterpret_cast<void *>(texture), ImVec2(960, 525));
-	ImGui::End();
+    
 	glViewport(0, 0, static_cast<int>(ImGui::GetIO().DisplaySize.x), static_cast<int>(ImGui::GetIO().DisplaySize.y));
 	ImGui::Render();
 	ImGui_ImplVitaGL_RenderDrawData(ImGui::GetDrawData());
@@ -255,9 +258,10 @@ static int weapon;
 uint32_t oldpad;
 void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 	if(keys & SCE_CTRL_SELECT){ // Swap Weapons / Confirm Savegames
-        gamestate.weapon =
-		gamestate.chosenweapon =
-        gamestate.bestweapon = wp_knife;
+        if (state && (!(oldpad & SCE_CTRL_SELECT))){
+            gamestate.weapon = (gamestate.weapon + 1) % (gamestate.bestweapon + 1);
+            gamestate.chosenweapon = (gamestate.chosenweapon + 1) % (gamestate.bestweapon + 1);
+        }
 		keyboard_handler(sc_Enter, state);
 	}
 	if( keys & SCE_CTRL_CROSS){ // Yes button/Fire
@@ -290,35 +294,10 @@ void INL_SetKeys(SceUInt32 keys, SceUInt32 state){
 		keyboard_handler(sc_RightArrow, state);
 	}
 	if( keys & SCE_CTRL_LTRIGGER){ // Change weapon
-		if (state == 1){
-			weapon = gamestate.weapon;
-			if (gamestate.weapon == 0){
-				keyboard_handler(sc_1, 0);
-				keyboard_handler(sc_2, 1);
-				keyboard_handler(sc_3, 0); 
-				keyboard_handler(sc_4, 0);
-			}else if (gamestate.weapon == 1){
-				keyboard_handler(sc_1, 0);
-				keyboard_handler(sc_2, 0);
-				keyboard_handler(sc_3, 1); 
-				keyboard_handler(sc_4, 0);
-			}else if (gamestate.weapon == 2){
-				keyboard_handler(sc_1, 0);
-				keyboard_handler(sc_2, 0);
-				keyboard_handler(sc_3, 0); 
-				keyboard_handler(sc_4, 1);
-			}else{
-				keyboard_handler(sc_1, 1);
-				keyboard_handler(sc_2, 0);
-				keyboard_handler(sc_3, 0); 
-				keyboard_handler(sc_4, 0);
-			}
-		}else{
-			keyboard_handler(sc_1, 0); 
-			keyboard_handler(sc_2, 0);
-			keyboard_handler(sc_3, 0); 
-			keyboard_handler(sc_4, 0);
-		}
+		if (state && (!(oldpad & SCE_CTRL_LTRIGGER))){
+            gamestate.weapon = (gamestate.weapon + 1) % (gamestate.bestweapon + 1);
+            gamestate.chosenweapon = (gamestate.chosenweapon + 1) % (gamestate.bestweapon + 1);
+        }
 		keyboard_handler(sc_Enter, state);
 	}
 	if( keys & SCE_CTRL_RTRIGGER){ // Yes button/Fire
