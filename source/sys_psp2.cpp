@@ -11,8 +11,8 @@ void ImGui_callback() {
 	ImGui_ImplVitaGL_NewFrame();
 	
 	if (ImGui::BeginMainMenuBar()){
-        if (ImGui::BeginMenu("Launcher")){
-            if (ImGui::MenuItem("Launch Wolfenstein 3D Shareware", nullptr, false, avail[0])){
+		if (ImGui::BeginMenu("Launcher")){
+			if (ImGui::MenuItem("Launch Wolfenstein 3D Shareware", nullptr, false, avail[0])){
 				sceAppMgrLoadExec("app0:/eboot0.bin", NULL, NULL);
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D Full", nullptr, false, avail[1])){
@@ -27,20 +27,20 @@ void ImGui_callback() {
 			if (ImGui::MenuItem("Exit vitaWolfen")){
 				sceKernelExitProcess(0);
 			}
-            ImGui::EndMenu();
-        }
+			ImGui::EndMenu();
+		}
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(870);
 		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate); 
-        ImGui::EndMainMenuBar();
+		ImGui::EndMainMenuBar();
 	}
 	
 	SceTouchData touch;
-    sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
-    uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
-    if (touch.reportNum > 0){
-        ImGui::GetIO().MouseDrawCursor = true;
-        tmr1 = sceKernelGetProcessTimeWide();
+	sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
+	uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
+	if (touch.reportNum > 0){
+		ImGui::GetIO().MouseDrawCursor = true;
+		tmr1 = sceKernelGetProcessTimeWide();
 	}else if (delta_touch > 1000000) ImGui::GetIO().MouseDrawCursor = false;
 	
 	glViewport(0, 0, static_cast<int>(ImGui::GetIO().DisplaySize.x), static_cast<int>(ImGui::GetIO().DisplaySize.y));
@@ -73,7 +73,7 @@ void ImGui_SetCallback() {
 	ImGui_ImplVitaGL_UseIndirectFrontTouch(true);
 	ImGui::StyleColorsDark();
 	
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO();
 	io.MouseDrawCursor = false;
 	
 	scePowerSetArmClockFrequency(444);
