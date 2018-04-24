@@ -12,11 +12,19 @@ int _fps = 0;
 bool inf_ammo = false;
 bool bilinear = true;
 bool vflux_window = false;
+bool res_window = false;
 bool vflux_enabled = false;
 float vcolors[3];
 uint16_t *vindices;
 float *colors;
 float *vertices;
+
+int screen_x = 0;
+int screen_y = 0;
+float screen_res_w = 960.0f;
+float screen_res_h = 544.0f;
+float old_screen_res_w = 960.0f;
+float old_screen_res_h = 544.0f;
 
 void ImGui_callback() {
 
@@ -65,6 +73,9 @@ void ImGui_callback() {
 			if (ImGui::MenuItem("vFlux Config", nullptr, vflux_window)){
 				vflux_window = !vflux_window;
 			}
+			if (ImGui::MenuItem("Resolution", nullptr, res_window)){
+				res_window = !res_window;
+			}
 			ImGui::EndMenu();
 		}
 		
@@ -95,6 +106,13 @@ void ImGui_callback() {
 			ImGui::Begin("vFlux Configuration", &vflux_window);
 			ImGui::ColorPicker3("Filter Color", vcolors);
 			ImGui::Checkbox("Enable vFlux", &vflux_enabled);
+			ImGui::End();
+		}
+		
+		if (res_window){
+			ImGui::Begin("Resolution", &vflux_window);
+			ImGui::SliderFloat("Width", &screen_res_w, 0.0f, 960.0f, "%g");
+			ImGui::SliderFloat("Height", &screen_res_h, 0.0f, 544.0f, "%g");
 			ImGui::End();
 		}
 		
@@ -142,6 +160,14 @@ void ImGui_callback() {
 	if (inf_ammo) {
 		gamestate.ammo = 99;
 	}
+	
+	if ((old_screen_res_w != screen_res_w) || (old_screen_res_h != screen_res_h)){
+		screen_x = (int)(960.0f - screen_res_w) / 2;
+		screen_y = (int)(544.0f - screen_res_h) / 2;
+		SDL_SetVideoModeScaling(screen_x, screen_y, screen_res_w, screen_res_h);
+	}
+	old_screen_res_w = screen_res_w;
+	old_screen_res_h = screen_res_h;
 	
 }
 
