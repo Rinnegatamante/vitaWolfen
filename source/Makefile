@@ -1,7 +1,7 @@
 TARGET		:= vitaWolfen
 
 #CFLAGS += -Wall
-CFLAGS += -Wl,-q -g -O2
+CFLAGS += -Wl,-q -O2
 CFLAGS += -Wpointer-arith
 CFLAGS += -Wreturn-type
 CFLAGS += -Wwrite-strings
@@ -10,17 +10,11 @@ CFLAGS += -DNO_STDIO_REDIRECT
 CFLAGS += -flto -DWMODE=$(WMODE)
 CFLAGS += -mtune=cortex-a9 -mfpu=neon
 
-CCFLAGS += $(CFLAGS)
-CCFLAGS += -std=gnu99
-CCFLAGS += -Werror-implicit-function-declaration
-CCFLAGS += -Wimplicit-int
-CCFLAGS += -Wsequence-point
-
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CXX      = $(PREFIX)-g++
 
-CXXFLAGS += $(CFLAGS) -I$(VITASDK)/$(PREFIX)/include/SDL -fpermissive -fno-exceptions
+CXXFLAGS += $(CFLAGS) -I$(VITASDK)/$(PREFIX)/include/SDL -fpermissive -fno-exceptions -std=c++11
 
 LDFLAGS += -lSDL_mixer -lSceAudio_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub -lvorbis \
@@ -76,7 +70,7 @@ endif
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself -s $< .\release\eboot$(WMODE).bin
+	vita-make-fself -s $< ..\release\eboot$(WMODE).bin
 	
 %.velf: %.elf
 	cp $< $<.unstripped.elf
