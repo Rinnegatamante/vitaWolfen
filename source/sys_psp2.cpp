@@ -33,16 +33,16 @@ void ImGui_callback() {
 	if (ImGui::BeginMainMenuBar()){
 		if (ImGui::BeginMenu("Launcher")){
 			if (ImGui::MenuItem("Launch Wolfenstein 3D Shareware", nullptr, false, avail[0])){
-				sceAppMgrLoadExec("app0:/eboot0.bin", NULL, NULL);
+				sceAppMgrLoadExec("app0:/eboot00.bin", NULL, NULL);
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D Full", nullptr, false, avail[1])){
-				sceAppMgrLoadExec("app0:/eboot1.bin", NULL, NULL);
+				sceAppMgrLoadExec("app0:/eboot10.bin", NULL, NULL);
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Shareware", nullptr, false, avail[2])){
-				sceAppMgrLoadExec("app0:/eboot2.bin", NULL, NULL);
+				sceAppMgrLoadExec("app0:/eboot20.bin", NULL, NULL);
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Full", nullptr, false, avail[3])){
-				sceAppMgrLoadExec("app0:/eboot3.bin", NULL, NULL);
+				sceAppMgrLoadExec("app0:/eboot30.bin", NULL, NULL);
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger", nullptr, false, avail[4])){
 				sceAppMgrLoadExec("app0:/eboot22.bin", NULL, NULL);

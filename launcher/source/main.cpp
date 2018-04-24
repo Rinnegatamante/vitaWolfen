@@ -92,27 +92,27 @@ int main(){
 		}
 		if (avail[1] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D Full")){
-				exit_code = 1;
+				exit_code = 10;
 			}
 		}
 		if (avail[2] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Shareware")){
-				exit_code = 2;
+				exit_code = 20;
 			}
 		}
 		if (avail[3] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Full")){
-				exit_code = 3;
+				exit_code = 30;
 			}
 		}
 		if (avail[4] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger")){
-				exit_code = 3;
+				exit_code = 22;
 			}
 		}
 		if (avail[5] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge")){
-				exit_code = 3;
+				exit_code = 23;
 			}
 		}
 		ImGui::End();
@@ -125,7 +125,7 @@ int main(){
 	closeHandles();
 	if (exit_code != 0xBEEF){
 		char file[256];
-		sprintf(file,"app0:/eboot%d.bin", exit_code);
+		sprintf(file,"app0:/eboot%02d.bin", exit_code);
 		sceAppMgrLoadExec(file, NULL, NULL);
 	}else{
 		sceKernelExitProcess(0);
