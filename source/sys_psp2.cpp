@@ -6,8 +6,28 @@ int _newlib_heap_size_user = 192 * 1024 * 1024;
 
 bool avail[4];
 uint64_t tmr1;
+uint64_t tick = 0;
+int frames = 0;
+int _fps = 0;
 
 void ImGui_callback() {
+
+	uint64_t t_tick = sceKernelGetProcessTimeWide();
+	if ((t_tick - tick) > 1000000){
+		_fps = frames;
+		frames = 0;
+		tick = t_tick;
+	}
+	frames++;
+	
+	SceTouchData touch;
+	sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
+	uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
+	if (touch.reportNum > 0){
+		ImGui::GetIO().MouseDrawCursor = true;
+		tmr1 = sceKernelGetProcessTimeWide();
+	}else if (delta_touch > 1000000) ImGui::GetIO().MouseDrawCursor = false;
+	
 	ImGui_ImplVitaGL_NewFrame();
 	
 	if (ImGui::BeginMainMenuBar()){
@@ -31,21 +51,14 @@ void ImGui_callback() {
 		}
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(870);
-		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate); 
+		
+		ImGui::Text("FPS: %d", _fps); 
 		ImGui::EndMainMenuBar();
 	}
 	
-	SceTouchData touch;
-	sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
-	uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
-	if (touch.reportNum > 0){
-		ImGui::GetIO().MouseDrawCursor = true;
-		tmr1 = sceKernelGetProcessTimeWide();
-	}else if (delta_touch > 1000000) ImGui::GetIO().MouseDrawCursor = false;
-	
-	glViewport(0, 0, static_cast<int>(ImGui::GetIO().DisplaySize.x), static_cast<int>(ImGui::GetIO().DisplaySize.y));
 	ImGui::Render();
 	ImGui_ImplVitaGL_RenderDrawData(ImGui::GetDrawData());
+	
 }
 
 void ImGui_SetCallback() {
@@ -65,23 +78,19 @@ void ImGui_SetCallback() {
 	avail[3] = (fd >= 0);
 	sceIoClose(fd);
 	
-	// ImGui startup
+	scePowerSetArmClockFrequency(444);
+	scePowerSetBusClockFrequency(222);
+	scePowerSetGpuClockFrequency(222);
+	scePowerSetGpuXbarClockFrequency(166);
+	
 	ImGui::CreateContext();
 	ImGui_ImplVitaGL_Init();
 	ImGui_ImplVitaGL_TouchUsage(true);
 	ImGui_ImplVitaGL_KeysUsage(false);
 	ImGui_ImplVitaGL_UseIndirectFrontTouch(true);
 	ImGui::StyleColorsDark();
+	ImGui::GetIO().MouseDrawCursor = false;
 	
-	ImGuiIO& io = ImGui::GetIO();
-	io.MouseDrawCursor = false;
-	
-	scePowerSetArmClockFrequency(444);
-	scePowerSetBusClockFrequency(222);
-	scePowerSetGpuClockFrequency(222);
-	scePowerSetGpuXbarClockFrequency(166);
-	
-	tmr1 = sceKernelGetProcessTimeWide();
 	SDL_SetVideoCallback(ImGui_callback);
 	
 }
