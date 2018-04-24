@@ -28,14 +28,6 @@ void ImGui_callback() {
 	}
 	frames++;
 	
-	SceTouchData touch;
-	sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
-	uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
-	if (touch.reportNum > 0){
-		ImGui::GetIO().MouseDrawCursor = true;
-		tmr1 = sceKernelGetProcessTimeWide();
-	}else if (delta_touch > 1000000) ImGui::GetIO().MouseDrawCursor = false;
-	
 	ImGui_ImplVitaGL_NewFrame();
 	
 	if (ImGui::BeginMainMenuBar()){
