@@ -3675,9 +3675,9 @@ ReadAnyControl (ControlInfo * ci)
         jb = IN_JoyButtons ();
         if (jb)
         {
-            ci->button0 = jb & 1;
+            ci->button0 = jb & 4;
             ci->button1 = jb & 2;
-            ci->button2 = jb & 4;
+            ci->button2 = jb & 1;
             ci->button3 = jb & 8;
         }
     }
