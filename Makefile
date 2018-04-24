@@ -11,5 +11,5 @@ all:
 	cp launcher/vitaWolfen.vpk vitaWolfen.vpk
 	
 clean:
-	make clean -f Makefile.core
+	make clean -C source
 	make -C launcher clean
