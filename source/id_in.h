@@ -174,6 +174,7 @@ boolean IN_JoyPresent();
 void    IN_SetJoyCurrent(int joyIndex);
 int     IN_JoyButtons (void);
 void    IN_GetJoyDelta(int *dx,int *dy);
+void    IN_GetJoyDelta2(int *dx,int *dy);
 void    IN_GetJoyFineDelta(int *dx, int *dy);
 
 void    IN_StartAck(void);

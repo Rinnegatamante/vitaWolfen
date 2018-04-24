@@ -182,6 +182,46 @@ void IN_GetJoyDelta(int *dx,int *dy)
     *dy = y;
 }
 
+void IN_GetJoyDelta2(int *dx,int *dy)
+{
+    if(!Joystick)
+    {
+        *dx = *dy = 0;
+        return;
+    }
+
+    SDL_JoystickUpdate();
+#ifdef _arch_dreamcast
+    int x = 0;
+    int y = 0;
+#else
+    int x = SDL_JoystickGetAxis(Joystick, 2) >> 8;
+    int y = SDL_JoystickGetAxis(Joystick, 3) >> 8;
+#endif
+
+    if(param_joystickhat != -1)
+    {
+        uint8_t hatState = SDL_JoystickGetHat(Joystick, param_joystickhat);
+        if(hatState & SDL_HAT_RIGHT)
+            x += 127;
+        else if(hatState & SDL_HAT_LEFT)
+            x -= 127;
+        if(hatState & SDL_HAT_DOWN)
+            y += 127;
+        else if(hatState & SDL_HAT_UP)
+            y -= 127;
+
+        if(x < -128) x = -128;
+        else if(x > 127) x = 127;
+
+        if(y < -128) y = -128;
+        else if(y > 127) y = 127;
+    }
+
+    *dx = x;
+    *dy = y;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 //
 //	IN_GetJoyFineDelta() - Returns the relative movement of the specified

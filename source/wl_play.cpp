@@ -362,20 +362,25 @@ void PollMouseMove (void)
 
 void PollJoystickMove (void)
 {
-    int joyx, joyy;
+    int joyx, joyy, joyx2, joyy2;
 
     IN_GetJoyDelta (&joyx, &joyy);
+	IN_GetJoyDelta2 (&joyx2, &joyy2);
 
     int delta = buttonstate[bt_run] ? RUNMOVE * tics : BASEMOVE * tics;
 
-    if (joyx > 64 || buttonstate[bt_turnright])
-        controlx += delta;
-    else if (joyx < -64  || buttonstate[bt_turnleft])
-        controlx -= delta;
+    if (joyx > 64 || buttonstate[bt_straferight])
+        buttonstate[bt_straferight] = 1;
+    else if (joyx < -64  || buttonstate[bt_strafeleft])
+        buttonstate[bt_strafeleft] = 1;
     if (joyy > 64 || buttonstate[bt_movebackward])
         controly += delta;
     else if (joyy < -64 || buttonstate[bt_moveforward])
         controly -= delta;
+	if (joyx2 > 64 || buttonstate[bt_turnright])
+        controlx += delta;
+    else if (joyx2 < -64  || buttonstate[bt_turnleft])
+        controlx -= delta;
 }
 
 /*
