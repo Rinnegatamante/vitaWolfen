@@ -85,7 +85,7 @@ boolean startgame;
 boolean loadedgame;
 int     mouseadjustment;
 
-char    configdir[256] = "";
+char    configdir[256] = "ux0:data/Wolfenstein 3D";
 char    configname[13] = "config.";
 
 //
