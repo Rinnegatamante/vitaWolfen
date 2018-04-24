@@ -5,7 +5,7 @@
 
 #define VERSION "1.5"
 
-SceUID avail[4];
+SceUID avail[6];
 
 void closeHandles(){
 	int i;
@@ -30,7 +30,9 @@ int main(){
 	avail[1] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.wl6", SCE_O_RDONLY, 0777);
 	avail[2] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sdm", SCE_O_RDONLY, 0777);
 	avail[3] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sod", SCE_O_RDONLY, 0777);
-
+	avail[4] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sd2", SCE_O_RDONLY, 0777);
+	avail[5] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sd3", SCE_O_RDONLY, 0777);
+	
 	while (exit_code == 0xDEAD){
 		vglStartRendering();
 		ImGui_ImplVitaGL_NewFrame();
@@ -48,6 +50,12 @@ int main(){
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Full", nullptr, false, avail[3] >= 0)){
 				exit_code = 3;
+			}
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger", nullptr, false, avail[4] >= 0)){
+				exit_code = 22;
+			}
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge", nullptr, false, avail[5] >= 0)){
+				exit_code = 23;
 			}
 			if (ImGui::MenuItem("Exit vitaWolfen")){
 				exit_code = 0xBEEF;
@@ -94,6 +102,16 @@ int main(){
 		}
 		if (avail[3] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Full")){
+				exit_code = 3;
+			}
+		}
+		if (avail[4] >= 0){
+			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger")){
+				exit_code = 3;
+			}
+		}
+		if (avail[5] >= 0){
+			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge")){
 				exit_code = 3;
 			}
 		}

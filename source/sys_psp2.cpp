@@ -4,7 +4,7 @@
 
 int _newlib_heap_size_user = 192 * 1024 * 1024;
 
-bool avail[4];
+bool avail[6];
 uint64_t tmr1;
 uint64_t tick = 0;
 int frames = 0;
@@ -44,6 +44,12 @@ void ImGui_callback() {
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Full", nullptr, false, avail[3])){
 				sceAppMgrLoadExec("app0:/eboot3.bin", NULL, NULL);
 			}
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger", nullptr, false, avail[4])){
+				sceAppMgrLoadExec("app0:/eboot22.bin", NULL, NULL);
+			}
+			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge", nullptr, false, avail[5])){
+				sceAppMgrLoadExec("app0:/eboot23.bin", NULL, NULL);
+			}
 			if (ImGui::MenuItem("Exit vitaWolfen")){
 				sceKernelExitProcess(0);
 			}
@@ -76,6 +82,12 @@ void ImGui_SetCallback() {
 	sceIoClose(fd);
 	fd = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sod", SCE_O_RDONLY, 0777);
 	avail[3] = (fd >= 0);
+	sceIoClose(fd);
+	fd = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sd2", SCE_O_RDONLY, 0777);
+	avail[4] = (fd >= 0);
+	sceIoClose(fd);
+	fd = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sd3", SCE_O_RDONLY, 0777);
+	avail[5] = (fd >= 0);
 	sceIoClose(fd);
 	
 	scePowerSetArmClockFrequency(444);

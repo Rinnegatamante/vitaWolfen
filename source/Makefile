@@ -8,6 +8,7 @@ CFLAGS += -Wwrite-strings
 CFLAGS += -Wcast-align
 CFLAGS += -DNO_STDIO_REDIRECT
 CFLAGS += -flto -DWMODE=$(WMODE)
+CFLAGS += -DMISSIONPACK=$(MISSIONPACK)
 CFLAGS += -mtune=cortex-a9 -mfpu=neon
 
 PREFIX  = arm-vita-eabi
@@ -70,7 +71,7 @@ endif
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself -s $< ..\release\eboot$(WMODE).bin
+	vita-make-fself -s $< ..\release\eboot$(WMODE)$(MISSIONPACK).bin
 	
 %.velf: %.elf
 	cp $< $<.unstripped.elf

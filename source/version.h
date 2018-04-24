@@ -17,6 +17,7 @@
 # define SPEARDEMO
 #elif WMODE == 3
 # define SPEAR
+# define GOODTIMES
 #endif
 
 //#define USE_FEATUREFLAGS    // Enables the level feature flags (see bottom of wl_def.h)

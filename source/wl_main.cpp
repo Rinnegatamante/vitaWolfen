@@ -1694,6 +1694,10 @@ void CheckParameters(int argc, char *argv[])
     bool sampleRateGiven = false, audioBufferGiven = false;
     int defaultSampleRate = param_samplerate;
 
+#if MISSIONPACK > 0
+	param_mission = MISSIONPACK;
+#endif
+	
     for(int i = 1; i < argc; i++)
     {
         char *arg = argv[i];
