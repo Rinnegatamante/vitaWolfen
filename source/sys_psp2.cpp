@@ -26,6 +26,8 @@ float screen_res_h = 544.0f;
 float old_screen_res_w = 960.0f;
 float old_screen_res_h = 544.0f;
 
+SDL_Shader shader = SDL_SHADER_NONE;
+
 void ImGui_callback() {
 
 	uint64_t t_tick = sceKernelGetProcessTimeWide();
@@ -76,6 +78,29 @@ void ImGui_callback() {
 			if (ImGui::MenuItem("Resolution", nullptr, res_window)){
 				res_window = !res_window;
 			}
+			if (ImGui::BeginMenu("Shaders")){
+				if (ImGui::MenuItem("None", nullptr, shader == SDL_SHADER_NONE)){
+					shader = SDL_SHADER_NONE;
+					SDL_SetVideoShader(SDL_SHADER_NONE);
+				}
+				if (ImGui::MenuItem("Sharp Bilinear", nullptr, shader == SDL_SHADER_SHARP_BILINEAR)){
+					shader = SDL_SHADER_SHARP_BILINEAR;
+					SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR);
+				}
+				if (ImGui::MenuItem("Sharp Bilinear (Scancode)", nullptr, shader == SDL_SHADER_SHARP_BILINEAR_SIMPLE)){
+					shader = SDL_SHADER_SHARP_BILINEAR_SIMPLE;
+					SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR_SIMPLE);
+				}
+				if (ImGui::MenuItem("LCD 3x", nullptr, shader == SDL_SHADER_LCD3X)){
+					shader = SDL_SHADER_LCD3X;
+					SDL_SetVideoShader(SDL_SHADER_LCD3X);
+				}
+				if (ImGui::MenuItem("xBR x2", nullptr, shader == SDL_SHADER_XBR_2X_FAST)){
+					shader = SDL_SHADER_XBR_2X_FAST;
+					SDL_SetVideoShader(SDL_SHADER_XBR_2X_FAST);
+				}
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenu();
 		}
 		
@@ -110,7 +135,7 @@ void ImGui_callback() {
 		}
 		
 		if (res_window){
-			ImGui::Begin("Resolution", &vflux_window);
+			ImGui::Begin("Resolution", &res_window);
 			ImGui::SliderFloat("Width", &screen_res_w, 0.0f, 960.0f, "%g");
 			ImGui::SliderFloat("Height", &screen_res_h, 0.0f, 544.0f, "%g");
 			ImGui::End();
@@ -174,7 +199,7 @@ void ImGui_callback() {
 void ImGui_SetCallback() {
 	
 	// Checking for available games
-	SceUID fd;
+	SceUID fd; 
 	fd = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.wl1", SCE_O_RDONLY, 0777);
 	avail[0] = (fd >= 0);
 	sceIoClose(fd);
