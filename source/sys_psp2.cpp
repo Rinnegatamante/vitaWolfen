@@ -1,4 +1,5 @@
 #include "wl_def.h"
+#pragma pack()
 #include <vitaGL.h>
 #include <imgui_vita.h>
 
@@ -6,9 +7,6 @@ int _newlib_heap_size_user = 192 * 1024 * 1024;
 
 bool avail[6];
 uint64_t tmr1;
-uint64_t tick = 0;
-int frames = 0;
-int _fps = 0;
 bool inf_ammo = false;
 bool bilinear = true;
 bool vflux_window = false;
@@ -29,14 +27,6 @@ float old_screen_res_h = 544.0f;
 SDL_Shader shader = SDL_SHADER_NONE;
 
 void ImGui_callback() {
-
-	uint64_t t_tick = sceKernelGetProcessTimeWide();
-	if ((t_tick - tick) > 1000000){
-		_fps = frames;
-		frames = 0;
-		tick = t_tick;
-	}
-	frames++;
 	
 	ImGui_ImplVitaGL_NewFrame();
 	
@@ -144,7 +134,7 @@ void ImGui_callback() {
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(870);
 		
-		ImGui::Text("FPS: %d", _fps); 
+		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate); 
 		ImGui::EndMainMenuBar();
 	}
 	
@@ -193,6 +183,14 @@ void ImGui_callback() {
 	}
 	old_screen_res_w = screen_res_w;
 	old_screen_res_h = screen_res_h;
+	
+	SceTouchData touch;
+	sceTouchPeek(SCE_TOUCH_PORT_FRONT, &touch, 1);
+	uint64_t delta_touch = sceKernelGetProcessTimeWide() - tmr1;
+	if (touch.reportNum > 0){
+		ImGui::GetIO().MouseDrawCursor = true;
+		tmr1 = sceKernelGetProcessTimeWide();
+	}else if (delta_touch > 3000000) ImGui::GetIO().MouseDrawCursor = false;
 	
 }
 
