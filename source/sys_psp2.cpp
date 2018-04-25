@@ -245,7 +245,7 @@ void ImGui_SetCallback() {
 	ImGui::CreateContext();
 	ImGui_ImplVitaGL_Init();
 	ImGui_ImplVitaGL_TouchUsage(true);
-	ImGui_ImplVitaGL_KeysUsage(false);
+	ImGui_ImplVitaGL_MouseStickUsage(false);
 	ImGui_ImplVitaGL_UseIndirectFrontTouch(true);
 	ImGui::StyleColorsDark();
 	ImGui::GetIO().MouseDrawCursor = false;
