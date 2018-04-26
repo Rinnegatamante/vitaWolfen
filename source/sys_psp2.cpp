@@ -73,11 +73,11 @@ void ImGui_callback() {
 					shader = SDL_SHADER_NONE;
 					SDL_SetVideoShader(SDL_SHADER_NONE);
 				}
-				if (ImGui::MenuItem("Sharp Bilinear", nullptr, shader == SDL_SHADER_SHARP_BILINEAR)){
+				if (ImGui::MenuItem("Sharp Bilinear (scanlines)", nullptr, shader == SDL_SHADER_SHARP_BILINEAR)){
 					shader = SDL_SHADER_SHARP_BILINEAR;
 					SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR);
 				}
-				if (ImGui::MenuItem("Sharp Bilinear (Scancode)", nullptr, shader == SDL_SHADER_SHARP_BILINEAR_SIMPLE)){
+				if (ImGui::MenuItem("Sharp Bilinear Simple", nullptr, shader == SDL_SHADER_SHARP_BILINEAR_SIMPLE)){
 					shader = SDL_SHADER_SHARP_BILINEAR_SIMPLE;
 					SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR_SIMPLE);
 				}
