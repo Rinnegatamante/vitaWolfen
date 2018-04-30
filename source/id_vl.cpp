@@ -16,7 +16,11 @@
 #define assert_ret(x) assert(x)
 #endif
 
+#ifdef __vita__
+boolean fullscreen = false;
+#else
 boolean fullscreen = true;
+#endif
 #if defined(_arch_dreamcast)
 boolean usedoublebuffering = false;
 unsigned screenWidth = 320;

@@ -73,11 +73,11 @@ void ImGui_callback() {
 					shader = SDL_SHADER_NONE;
 					SDL_SetVideoShader(SDL_SHADER_NONE);
 				}
-				if (ImGui::MenuItem("Sharp Bilinear", nullptr, shader == SDL_SHADER_SHARP_BILINEAR)){
+				if (ImGui::MenuItem("Sharp Bilinear (scanlines)", nullptr, shader == SDL_SHADER_SHARP_BILINEAR)){
 					shader = SDL_SHADER_SHARP_BILINEAR;
 					SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR);
 				}
-				if (ImGui::MenuItem("Sharp Bilinear (Scancode)", nullptr, shader == SDL_SHADER_SHARP_BILINEAR_SIMPLE)){
+				if (ImGui::MenuItem("Sharp Bilinear", nullptr, shader == SDL_SHADER_SHARP_BILINEAR_SIMPLE)){
 					shader = SDL_SHADER_SHARP_BILINEAR_SIMPLE;
 					SDL_SetVideoShader(SDL_SHADER_SHARP_BILINEAR_SIMPLE);
 				}
@@ -128,6 +128,26 @@ void ImGui_callback() {
 			ImGui::Begin("Resolution", &res_window);
 			ImGui::SliderFloat("Width", &screen_res_w, 0.0f, 960.0f, "%g");
 			ImGui::SliderFloat("Height", &screen_res_h, 0.0f, 544.0f, "%g");
+			if (ImGui::Button("Fit (4:3)")){
+				screen_res_h = 544.0f;
+				screen_res_w = (4.0f * screen_res_h) / 3.0f;
+			}
+			if (ImGui::Button("Fit (16:10)")){
+				screen_res_h = 544.0f;
+				screen_res_w = (16.0f * screen_res_h) / 10.0f;
+			}
+			if (ImGui::Button("Full")){
+				screen_res_h = 544.0f;
+				screen_res_w = 960.0f;
+			}
+			if (ImGui::Button("1x")){
+				screen_res_h = 200.0f;
+				screen_res_w = 320.0f;
+			}
+			if (ImGui::Button("2x")){
+				screen_res_h = 400.0f;
+				screen_res_w = 640.0f;
+			}
 			ImGui::End();
 		}
 		
@@ -245,7 +265,7 @@ void ImGui_SetCallback() {
 	ImGui::CreateContext();
 	ImGui_ImplVitaGL_Init();
 	ImGui_ImplVitaGL_TouchUsage(true);
-	ImGui_ImplVitaGL_KeysUsage(false);
+	ImGui_ImplVitaGL_MouseStickUsage(false);
 	ImGui_ImplVitaGL_UseIndirectFrontTouch(true);
 	ImGui::StyleColorsDark();
 	ImGui::GetIO().MouseDrawCursor = false;
