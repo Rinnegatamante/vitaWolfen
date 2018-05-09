@@ -76,13 +76,16 @@ int main(){
 		ImGui::Text("You're running vitaWolfen v.%s", VERSION);
 		ImGui::Spacing();
 		ImGui::Spacing();
-		ImGui::Text("Author: Rinnegatamante");
+		ImGui::Text("Port Author: Rinnegatamante");
 		ImGui::Spacing();
 		ImGui::Spacing();
 		ImGui::TextColored(ImVec4(255,255,0,255),"Credits:");
+		ImGui::Text("rsn8887 for fixing shaders for vitaGL usage");
+		ImGui::Text("ocornut for dear ImGui");
 		ImGui::Text("XandridFire for the awesome support on Patreon");
 		ImGui::Text("Styde Pregny for the awesome support on Patreon");
 		ImGui::Text("Billy McLaughlin II for the awesome support on Patreon");
+		ImGui::Text("Colan Wiser for the awesome support on Patreon");
 		ImGui::Spacing();
 		ImGui::Spacing();
 		
