@@ -74,7 +74,7 @@ $(TARGET).vpk: $(TARGET).velf
 	vita-make-fself -s $< ..\release\eboot$(WMODE)$(MISSIONPACK).bin
 	
 %.velf: %.elf
-	cp $< $<.unstripped.elf
+	cp $< $<.unstripped$(WMODE)$(MISSIONPACK).elf
 	$(PREFIX)-strip -g $<
 	vita-elf-create $< $@
 
