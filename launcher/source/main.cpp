@@ -3,7 +3,7 @@
 #include <imgui_vita.h>
 #include <stdio.h>
 
-#define VERSION "1.5"
+#define VERSION "1.6"
 
 SceUID avail[6];
 
@@ -53,10 +53,10 @@ int main(){
 				exit_code = 3;
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger", nullptr, false, avail[4] >= 0)){
-				exit_code = 22;
+				exit_code = 32;
 			}
 			if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge", nullptr, false, avail[5] >= 0)){
-				exit_code = 23;
+				exit_code = 33;
 			}
 			if (ImGui::MenuItem("Exit vitaWolfen")){
 				exit_code = 0xBEEF;
@@ -82,10 +82,9 @@ int main(){
 		ImGui::TextColored(ImVec4(255,255,0,255),"Credits:");
 		ImGui::Text("rsn8887 for fixing shaders for vitaGL usage");
 		ImGui::Text("ocornut for dear ImGui");
+		ImGui::Text("CountDuckula for testing the homebrew on demand");
 		ImGui::Text("XandridFire for the awesome support on Patreon");
-		ImGui::Text("Styde Pregny for the awesome support on Patreon");
 		ImGui::Text("Billy McLaughlin II for the awesome support on Patreon");
-		ImGui::Text("Colan Wiser for the awesome support on Patreon");
 		ImGui::Spacing();
 		ImGui::Spacing();
 		
@@ -111,12 +110,12 @@ int main(){
 		}
 		if (avail[4] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger")){
-				exit_code = 22;
+				exit_code = 32;
 			}
 		}
 		if (avail[5] >= 0){
 			if (ImGui::Button("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge")){
-				exit_code = 23;
+				exit_code = 33;
 			}
 		}
 		ImGui::End();

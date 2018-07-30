@@ -71,10 +71,10 @@ void ImGui_callback() {
 					sceAppMgrLoadExec("app0:/eboot30.bin", NULL, NULL);
 				}
 				if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 2: Return to Danger", nullptr, false, avail[4])){
-					sceAppMgrLoadExec("app0:/eboot22.bin", NULL, NULL);
+					sceAppMgrLoadExec("app0:/eboot32.bin", NULL, NULL);
 				}
 				if (ImGui::MenuItem("Launch Wolfenstein 3D: Spear of Destiny Mission 3: Ultimate Challenge", nullptr, false, avail[5])){
-					sceAppMgrLoadExec("app0:/eboot23.bin", NULL, NULL);
+					sceAppMgrLoadExec("app0:/eboot33.bin", NULL, NULL);
 				}
 				if (ImGui::MenuItem("Exit vitaWolfen")){
 					sceKernelExitProcess(0);
@@ -208,18 +208,17 @@ void ImGui_callback() {
 	
 	if (credits_window){
 		ImGui::Begin("Credits", &credits_window);
-		ImGui::TextColored(ImVec4(255, 255, 0, 255), "vitaWolfen v.1.5");
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "vitaWolfen v.1.6");
 		ImGui::Text("Port Author: Rinnegatamante");
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Patreon Supporters:");
 		ImGui::Text("XandridFire");
-		ImGui::Text("Styde Pregny");
 		ImGui::Text("Billy McLaughlin II");
-		ImGui::Text("Colan Wiser");
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Special thanks to:");
 		ImGui::Text("rsn8887 for fixing shaders for vitaGL usage");
 		ImGui::Text("ocornut for dear ImGui");
+		ImGui::Text("CountDuckula for testing the homebrew on demand");
 		ImGui::End();
 	}
 	
