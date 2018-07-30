@@ -1236,6 +1236,7 @@ void Died (void)
     gamestate.weapon = (weapontype) -1;                     // take away weapon
     SD_PlaySound (PLAYERDEATHSND);
 
+#if (!defined(GOODTIMES)) || (defined(SPEARDEMO))
     //
     // swing around to face attacker
     //
@@ -1328,6 +1329,7 @@ void Died (void)
     FizzleFade(screenBuffer,viewscreenx,viewscreeny,viewwidth,viewheight,70,false);
 
     IN_UserInput(100);
+#endif
     SD_WaitSoundDone ();
     ClearMemory();
 
@@ -1354,6 +1356,9 @@ void Died (void)
             DrawLives ();
         }
     }
+#if (defined(GOODTIMES) || (!defined(SPEARDEMO) && defined(SPEAR)))
+	VW_FadeIn ();
+#endif
 }
 
 //==========================================================================
