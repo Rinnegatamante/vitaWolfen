@@ -4,6 +4,7 @@
 *.elf
 *.velf
 *.a
+*.vpk
 
 # Windows image file caches
 Thumbs.db

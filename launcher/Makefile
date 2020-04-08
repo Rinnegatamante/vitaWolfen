@@ -4,7 +4,7 @@ TITLE		:= WOLF00001
 
 LIBS = -limgui -lvitagl -lSceAppmgr_stub -lSceDisplay_stub -lSceGxm_stub \
 	-lSceSysmodule_stub -lSceCtrl_stub -lm -lc -lSceCommonDialog_stub -lz \
-	-lSceTouch_stub
+	-lSceTouch_stub -lmathneon
 
 COMMON_OBJS = source/main.o
 
