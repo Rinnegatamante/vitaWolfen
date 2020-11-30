@@ -81,12 +81,22 @@ int main(){
 		ImGui::Text("Port Author: Rinnegatamante");
 		ImGui::Spacing();
 		ImGui::Spacing();
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "Patreon Supporters:");
+		ImGui::Text("XandridFire");
+		ImGui::Text("Tain Sueiras");
+		ImGui::Text("drd7of14");
+		ImGui::Text("@Sarkies_Proxy");
+		ImGui::Text("Freddy Parra");
+		ImGui::Text("ArkSource");
+		ImGui::Text("Badmanwazzy37");
+		ImGui::Text("TitiClash");
+		ImGui::Text("The Vita3K project");
+		ImGui::Spacing();
+		ImGui::Spacing();
 		ImGui::TextColored(ImVec4(255,255,0,255),"Credits:");
 		ImGui::Text("rsn8887 for fixing shaders for vitaGL usage");
 		ImGui::Text("ocornut for dear ImGui");
 		ImGui::Text("CountDuckula for testing the homebrew on demand");
-		ImGui::Text("XandridFire for the awesome support on Patreon");
-		ImGui::Text("Billy McLaughlin II for the awesome support on Patreon");
 		ImGui::Spacing();
 		ImGui::Spacing();
 		
