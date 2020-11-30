@@ -28,10 +28,11 @@ $(TARGET).vpk: $(TARGET).velf
 	cp -f param.sfo ../release/sce_sys/param.sfo
 	
 	#------------ Comment this if you don't have 7zip ------------------
-	7z a -tzip ./$(TARGET).vpk -r ..\release\sce_sys\* ..\release\eboot10.bin ..\release\eboot32.bin ..\release\eboot33.bin ..\release\eboot20.bin ..\release\eboot30.bin ..\release\eboot00.bin ..\release\eboot.bin 
+	7z a -tzip ./$(TARGET).vpk -r ..\release\sce_sys\* ..\release\shaders\* ..\release\eboot10.bin ..\release\eboot32.bin ..\release\eboot33.bin ..\release\eboot20.bin ..\release\eboot30.bin ..\release\eboot00.bin ..\release\eboot.bin 
 	#-------------------------------------------------------------------
 	
 %.velf: %.elf
+	cp $< $<.unstripped.elf
 	$(PREFIX)-strip -g $<
 	vita-elf-create $< $@
 
