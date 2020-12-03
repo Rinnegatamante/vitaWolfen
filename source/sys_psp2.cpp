@@ -98,7 +98,7 @@ void loadImGuiCfg(){
 		fread(str, 1, 256, f);
 		fclose(f);
 		uint32_t a,b,c;
-		sscanf(str, "%u;%u;%f;%f;%u;%u;%f;%f;%f;%u", &a, &shader, &screen_res_w, &screen_res_h, &b, &c, &vcolors[0], &vcolors[1], &vcolors[2], postfx_shader);
+		sscanf(str, "%u;%u;%f;%f;%u;%u;%f;%f;%f;%u", &a, &shader, &screen_res_w, &screen_res_h, &b, &c, &vcolors[0], &vcolors[1], &vcolors[2], &postfx_shader);
 		bilinear = (a == 1);
 		hide_menubar = (b == 1);
 		vflux_enabled = (c == 1);
