@@ -2,6 +2,7 @@ TARGET		:= vitaWolfen
 
 #CFLAGS += -Wall
 CFLAGS += -Wl,-q -O2
+CFLAGS += -D_POSIX_C_SOURCE=200809L
 CFLAGS += -Wpointer-arith
 CFLAGS += -Wreturn-type
 CFLAGS += -Wwrite-strings
@@ -17,11 +18,14 @@ CXX      = $(PREFIX)-g++
 
 CXXFLAGS += $(CFLAGS) -I$(VITASDK)/$(PREFIX)/include/SDL -fpermissive -fno-exceptions -std=c++11
 
-LDFLAGS += -lSDL_mixer -lSceAudio_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
+SDL_LIBS := $(shell arm-vita-eabi-pkg-config --static --libs SDL_mixer)
+
+LDFLAGS += -Wl,--start-group $(SDL_LIBS) -lSceAudio_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub	\
 	-lmikmod -lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lm -lSceNet_stub -lvorbis \
 	-lSceNetCtl_stub -lScePgf_stub -ljpeg -lfreetype -lc -lSDL -limgui -lvitaGL -lSceHid_stub \
-	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz -lSceAppmgr_stub -logg -lvorbisfile \
-	-lmathneon
+	-lScePower_stub -lSceCommonDialog_stub -lpng16 -lz -lSceAppMgr_stub -logg -lvorbisfile \
+	-lmathneon -lvitashark -lSceShaccCgExt -ltaihen_stub -lSceShaccCg_stub \
+	-lSceKernelDmacMgr_stub -lSceAppUtil_stub -Wl,--end-group
 
 SRCS :=
 SRCS += fmopl.cpp
@@ -72,7 +76,8 @@ endif
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself -s $< ..\release\eboot$(WMODE)$(MISSIONPACK).bin
+	mkdir -p ../release
+	vita-make-fself -s $< ../release/eboot$(WMODE)$(MISSIONPACK).bin
 	
 %.velf: %.elf
 	cp $< $<.unstripped$(WMODE)$(MISSIONPACK).elf

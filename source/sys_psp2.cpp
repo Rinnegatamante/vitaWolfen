@@ -40,7 +40,7 @@ enum {
 };
 uint32_t postfx_shader = 0;
 GLuint main_fb = 0xDEADBEEF, main_fb_tex;
-GLuint cur_shader[2] = {0xDEADBEEF, 0xDEADBEEF};
+static GLuint cur_shader[2] = {0xDEADBEEF, 0xDEADBEEF};
 static GLuint fx_fs[2], fx_vs[2];
 int postfx_idx = 0;
 
@@ -52,8 +52,8 @@ void GL_LoadFXShader(const char* filename, GLboolean fragment){
 	void* res = malloc(size);
 	fread(res, 1, size, f);
 	fclose(f);
-	if (fragment) glShaderBinary(1, &fx_fs[postfx_idx], 0, res, size);
-	else glShaderBinary(1, &fx_vs[postfx_idx], 0, res, size);
+	if (fragment) vglShaderGxpBinary(1, &fx_fs[postfx_idx], res, size);
+	else vglShaderGxpBinary(1, &fx_vs[postfx_idx], res, size);
 	free(res);
 }
 
@@ -132,15 +132,13 @@ void loadImGuiCfg(){
 
 void DoPostFX() {
 	if (postfx_shader != 0) {
-		vglStopRendering();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		vglStartRendering();
 		glBindTexture(GL_TEXTURE_2D, main_fb_tex);
 		glUseProgram(cur_shader[postfx_idx]);
 		vglIndexPointerMapped(vindices);
 		vglVertexAttribPointerMapped(0, vflux_vertices);
 		vglVertexAttribPointerMapped(1, vflux_texcoords);
-		vglDrawObjects(GL_TRIANGLE_FAN, 4, true);
+		vglDrawObjects(GL_TRIANGLE_FAN, 4);
 		glUseProgram(0);
 	}
 }
@@ -380,9 +378,9 @@ void ImGui_callback() {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glUseProgram(0);
 		vglIndexPointerMapped(vindices);
-		vglVertexPointerMapped(vflux_vertices);
+		vglVertexPointerMapped(3, vflux_vertices);
 		vglColorPointerMapped(GL_FLOAT, colors);
-		vglDrawObjects(GL_TRIANGLE_FAN, 4, true);
+		vglDrawObjects(GL_TRIANGLE_FAN, 4);
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}

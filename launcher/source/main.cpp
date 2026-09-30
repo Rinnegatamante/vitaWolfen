@@ -37,7 +37,6 @@ int main(){
 	avail[5] = sceIoOpen("ux0:/data/Wolfenstein 3D/vswap.sd3", SCE_O_RDONLY, 0777);
 	
 	while (exit_code == 0xDEAD){
-		vglStartRendering();
 		ImGui_ImplVitaGL_NewFrame();
 		
 		if (ImGui::BeginMainMenuBar()){
@@ -135,7 +134,7 @@ int main(){
 		glViewport(0, 0, static_cast<int>(ImGui::GetIO().DisplaySize.x), static_cast<int>(ImGui::GetIO().DisplaySize.y));
 		ImGui::Render();
 		ImGui_ImplVitaGL_RenderDrawData(ImGui::GetDrawData());
-		vglStopRendering();
+		vglSwapBuffers(GL_FALSE);
 	}
 	closeHandles();
 	if (exit_code != 0xBEEF){

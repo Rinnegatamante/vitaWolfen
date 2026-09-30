@@ -2,9 +2,10 @@ TARGET		:= vitaWolfen
 WMODE		:= 1
 TITLE		:= WOLF00001
 
-LIBS = -limgui -lvitagl -lSceAppmgr_stub -lSceDisplay_stub -lSceGxm_stub \
+LIBS = -Wl,--start-group -limgui -lvitaGL -lSceAppMgr_stub -lSceDisplay_stub -lSceGxm_stub \
 	-lSceSysmodule_stub -lSceCtrl_stub -lm -lc -lSceCommonDialog_stub -lz \
-	-lSceTouch_stub -lmathneon
+	-lSceTouch_stub -lmathneon -lvitashark -lSceShaccCgExt -ltaihen_stub \
+	-lSceShaccCg_stub -lSceKernelDmacMgr_stub -lSceAppUtil_stub -Wl,--end-group
 
 COMMON_OBJS = source/main.o
 
@@ -23,14 +24,21 @@ ASFLAGS = $(CFLAGS)
 all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
-	vita-make-fself -s $< ..\release\eboot.bin
+	mkdir -p ../release/sce_sys
+	vita-make-fself -s $< ../release/eboot.bin
 	vita-mksfoex -s TITLE_ID=$(TITLE) "$(TARGET)" param.sfo
 	cp -f param.sfo ../release/sce_sys/param.sfo
-	
-	#------------ Comment this if you don't have 7zip ------------------
-	7z a -tzip ./$(TARGET).vpk -r ..\release\sce_sys\* ..\release\shaders\* ..\release\eboot10.bin ..\release\eboot32.bin ..\release\eboot33.bin ..\release\eboot20.bin ..\release\eboot30.bin ..\release\eboot00.bin ..\release\eboot.bin 
-	#-------------------------------------------------------------------
-	
+	vita-pack-vpk -s param.sfo -b ../release/eboot.bin \
+		--add ../release/sce_sys/icon0.png=sce_sys/icon0.png \
+		--add ../release/sce_sys/livearea=sce_sys/livearea \
+		--add ../release/shaders=shaders \
+		--add ../release/eboot00.bin=eboot00.bin \
+		--add ../release/eboot10.bin=eboot10.bin \
+		--add ../release/eboot20.bin=eboot20.bin \
+		--add ../release/eboot30.bin=eboot30.bin \
+		--add ../release/eboot32.bin=eboot32.bin \
+		--add ../release/eboot33.bin=eboot33.bin $@
+
 %.velf: %.elf
 	cp $< $<.unstripped.elf
 	$(PREFIX)-strip -g $<
